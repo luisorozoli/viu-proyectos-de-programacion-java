@@ -6,7 +6,7 @@
 
 /**
  *
- * @author luisorozoli
+ * @author Sebastian Plaza, Gonzalo Sebastian, Luis Orozco.
  */
 public class supercomputacion {
 
