@@ -1,0 +1,6 @@
+DETALLES DE ACCESO A BASE DE DATOS EN AMAZON WEB SERVICES (AWS)
+
+Nombre de base de datos: BBDD-21GIIN
+Host/Server Endpoint:  bbdd-21giin.city7zvgthab.us-east-1.rds.amazonaws.com
+User: admin
+Pass: 0Xzrc7&q77NT
