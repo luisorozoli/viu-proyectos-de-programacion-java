@@ -15,9 +15,13 @@ import java.sql.PreparedStatement;
  *
  * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
  */
-public class ConsultasBBDD {
 
-    //listar usuarios
+
+
+public class ConsultasBBDD {
+    
+
+//Listar usuarios
     public ResultSet listarUsuarios() throws SQLException {
         
         Statement st = null;
@@ -42,7 +46,12 @@ public class ConsultasBBDD {
         return rs;
     }
     
-    //Modificar usuario
+//Crear usuario
+    public int crearUsuario() {
+        return 0;
+    }
+    
+//Modificar usuario
     
     public int modificarUsuario(String identificador) throws SQLException {
         
@@ -59,9 +68,22 @@ public class ConsultasBBDD {
        
         int filasModificadas = pst.executeUpdate();
         
-                
-        
-        
         return filasModificadas;
+    }
+
+//Eliminar usuario
+    
+    public int eliminarUsuario(String identificador) throws SQLException {
+        PreparedStatement pst = null;
+        
+        ConexionBBDD conexion = new ConexionBBDD();
+        String sSQL = "DELETE FROM USUARIOS WHERE IDENTIFICADOR = ?";
+        
+        Connection con = conexion.ConexionBBDD();
+        
+        pst = con.prepareStatement(sSQL);
+        int filasEliminadas = pst.executeUpdate();
+        
+        return filasEliminadas;
     }
 }
