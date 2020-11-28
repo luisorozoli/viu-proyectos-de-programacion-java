@@ -20,15 +20,18 @@ import java.sql.PreparedStatement;
 
 public class ConsultasBBDD {
     
+    private Statement st = null;
+    private ResultSet rs = null;
+    private PreparedStatement pst = null;
 
 //Listar usuarios
     public ResultSet listarUsuarios() throws SQLException {
         
-        Statement st = null;
-        ResultSet rs = null;
+//        Statement st = null;
+//        ResultSet rs = null;
         
         ConexionBBDD conexion = new ConexionBBDD();
-        String sSQL = "SELECT * FROM USUARIOS";
+        String sSQL = "SELECT * FROM usuarios";
         
         try {
             
@@ -55,7 +58,7 @@ public class ConsultasBBDD {
     
     public int modificarUsuario(String identificador) throws SQLException {
         
-        PreparedStatement pst = null;
+//        PreparedStatement pst = null;
         
         
         ConexionBBDD conexion = new ConexionBBDD();
@@ -74,7 +77,7 @@ public class ConsultasBBDD {
 //Eliminar usuario
     
     public int eliminarUsuario(String identificador) throws SQLException {
-        PreparedStatement pst = null;
+//        PreparedStatement pst = null;
         
         ConexionBBDD conexion = new ConexionBBDD();
         String sSQL = "DELETE FROM USUARIOS WHERE IDENTIFICADOR = ?";

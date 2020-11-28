@@ -8,8 +8,11 @@
  *
  * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
  */
+import BBDD.ConsultasBBDD;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class supercomputacion{
     private Frame ventana;
@@ -127,7 +130,17 @@ public class supercomputacion{
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws SQLException{
         supercomputacion pm = new supercomputacion();
+        
+        
+        //Ejemplo de consulta a BBDD
+        ConsultasBBDD user = new ConsultasBBDD();
+        ResultSet rs = user.listarUsuarios();
+       
+        while (rs.next()) {
+            System.out.println("El identificador de usurio es: "+ rs.getString(2)+" "+ rs.getString(1));
+        }
+        
     }
 }
