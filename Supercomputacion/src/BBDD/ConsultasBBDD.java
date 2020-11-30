@@ -23,6 +23,24 @@ public class ConsultasBBDD {
     private Statement st = null;
     private ResultSet rs = null;
     private PreparedStatement pst = null;
+    private ConexionBBDD conexion = new ConexionBBDD();
+    
+        //Comprobar Login
+    
+    public ResultSet comprobarLogin(String sIdentificador, String sClave) throws SQLException {
+        
+        String sSQL = "SELECT * from usuarios where identificador  = ? and clave = ?";
+        Connection con = conexion.ConexionBBDD();
+        
+        pst = con.prepareStatement(sSQL);
+        //Asignar parametros
+        pst.setString(1, sIdentificador);
+        pst.setString(2, sClave);
+        
+        ResultSet rs = pst.executeQuery();
+        
+        return rs;
+    }
 
 //Listar usuarios
     public ResultSet listarUsuarios() throws SQLException {
@@ -30,7 +48,6 @@ public class ConsultasBBDD {
 //        Statement st = null;
 //        ResultSet rs = null;
         
-        ConexionBBDD conexion = new ConexionBBDD();
         String sSQL = "SELECT * FROM usuarios";
         
         try {
@@ -61,7 +78,6 @@ public class ConsultasBBDD {
 //        PreparedStatement pst = null;
         
         
-        ConexionBBDD conexion = new ConexionBBDD();
         String sSQL = "SELECT * FROM USUARIOS WHERE identificador = ?";
         
         Connection con = conexion.ConexionBBDD();
@@ -79,7 +95,6 @@ public class ConsultasBBDD {
     public int eliminarUsuario(String identificador) throws SQLException {
 //        PreparedStatement pst = null;
         
-        ConexionBBDD conexion = new ConexionBBDD();
         String sSQL = "DELETE FROM USUARIOS WHERE IDENTIFICADOR = ?";
         
         Connection con = conexion.ConexionBBDD();
