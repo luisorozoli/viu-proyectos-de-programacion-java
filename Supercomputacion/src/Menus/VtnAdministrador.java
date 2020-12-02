@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author gonzalodiaz
+ * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
  */
 public class VtnAdministrador extends JFrame{
     
