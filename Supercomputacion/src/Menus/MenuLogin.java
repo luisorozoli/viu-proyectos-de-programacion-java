@@ -117,8 +117,10 @@ public class MenuLogin extends JFrame {
                 if (existe) {
                     
                     sTipoUsuario = resultado.getString(4);
-                    MenuPrincipal menuPrincipal = new MenuPrincipal();
-                    menuPrincipal.MostrarMenu(sTipoUsuario);
+                    //MenuPrincipal menuPrincipal = new MenuPrincipal();
+                    //menuPrincipal.MostrarMenu(sTipoUsuario);
+                    
+                    Ventana v = new Ventana(sTipoUsuario);
                     frame.setVisible(false);
                     frame.dispose();
 
