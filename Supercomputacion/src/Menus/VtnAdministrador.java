@@ -73,6 +73,7 @@ class PanelPrincipal extends JPanel{
         menuUsuarios.add(bajaUsuarios);
         menuUsuarios.add(modificacionUsuarios);
         
+               
         //Se agregan las opciones del menú Centros
         
         JMenuItem altaCentros = new JMenuItem("Alta");
