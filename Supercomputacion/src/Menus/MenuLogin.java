@@ -1,6 +1,6 @@
 package Menus;
 
-import BBDD.ConsultasBBDD;
+import BBDD.UsuariosBBDD;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -108,7 +108,7 @@ public class MenuLogin extends JFrame {
             }
             
             
-            ConsultasBBDD comprobarLogin = new ConsultasBBDD();
+            UsuariosBBDD comprobarLogin = new UsuariosBBDD();
             try {
                 ResultSet resultado = comprobarLogin.comprobarLogin(sIdentificador, sClave);
                 Boolean existe = resultado.next();

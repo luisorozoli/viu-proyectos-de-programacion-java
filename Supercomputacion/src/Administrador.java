@@ -1,4 +1,5 @@
 
+import Entidades.Usuarios;
 import java.sql.*;
 
 /*
@@ -46,7 +47,7 @@ public class Administrador extends AdministradorCentro {
             System.out.println(e);
         }
         
-        Usuario user = new Usuario (id,pass,tipo_usuario);  // A esta instancia habría que ponerla en algún lado
+        Usuarios user = new Usuarios (id,pass,tipo_usuario);  // A esta instancia habría que ponerla en algún lado
         
         // El usuario se creó
         return 1;

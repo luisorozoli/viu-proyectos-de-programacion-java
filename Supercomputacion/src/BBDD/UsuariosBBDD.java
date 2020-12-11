@@ -18,7 +18,7 @@ import java.sql.PreparedStatement;
 
 
 
-public class ConsultasBBDD {
+public class UsuariosBBDD {
     
     private Statement st = null;
     private ResultSet rs = null;
@@ -67,8 +67,19 @@ public class ConsultasBBDD {
     }
     
 //Crear usuario
-    public int crearUsuario() {
-        return 0;
+    public int crearUsuario() throws SQLException {
+        
+       String sSQL = "INSERT INTO supercomputacion.usuarios(idusuario,identificador,clave,tipousuario)VALUES(?,?,?,?)";
+       
+       Connection con = conexion.ConexionBBDD();
+       
+       pst = con.prepareStatement(sSQL);
+//       pst.setString(0, usuario.getUserId());
+//       pst.setString(1, usuario.setTipoUsuario(Usuario_1.TipoUsuario.usuario));
+       
+       
+
+       return 0;
     }
     
 //Modificar usuario

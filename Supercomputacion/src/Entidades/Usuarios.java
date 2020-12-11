@@ -1,3 +1,5 @@
+package Entidades;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,9 +10,9 @@
  *
  * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
  */
-public class Usuario {
+public class Usuarios {
     
-    enum TipoUsuario{
+   public enum TipoUsuario{
         administrador,
         administradorCentro,
         usuario        
@@ -20,7 +22,7 @@ public class Usuario {
     private String clave;
     private TipoUsuario tipo;
     
-    public Usuario(String id, String pass, TipoUsuario tipo_usuario){
+    public Usuarios(String id, String pass, TipoUsuario tipo_usuario){
         userId = id;
         clave = pass;
         tipo = tipo_usuario;        
