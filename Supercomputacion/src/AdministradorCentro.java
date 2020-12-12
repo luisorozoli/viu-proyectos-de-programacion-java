@@ -15,7 +15,7 @@ public class AdministradorCentro extends Usuarios {
     
     private String adminCentroId;
         
-    public AdministradorCentro(String id, String pass, TipoUsuario tipo_usuario) {
+    public AdministradorCentro(String id, String pass, String tipo_usuario) {
         super(id, pass, tipo_usuario);
     }
     

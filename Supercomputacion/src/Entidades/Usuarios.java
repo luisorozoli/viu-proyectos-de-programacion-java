@@ -12,17 +12,16 @@ package Entidades;
  */
 public class Usuarios {
     
-   public enum TipoUsuario{
-        administrador,
-        administradorCentro,
-        usuario        
-    }
-    
+  
     private String userId;
     private String clave;
-    private TipoUsuario tipo;
+    private String tipo;
     
-    public Usuarios(String id, String pass, TipoUsuario tipo_usuario){
+    public Usuarios(){
+        
+    }
+    
+    public Usuarios(String id, String pass, String tipo_usuario){
         userId = id;
         clave = pass;
         tipo = tipo_usuario;        
@@ -44,15 +43,12 @@ public class Usuarios {
         return clave;
     }
     
-    public void setTipoUsuario(TipoUsuario tipo){
+    public void setTipoUsuario(String tipo){
         this.tipo = tipo;
     }
     
-    public TipoUsuario getTipoUsuario(){
+    public String getTipoUsuario(){
         return tipo;
     }
-    
-    public boolean login(String user, String pass){
-        return this.userId.equals(user) && this.clave.equals(pass);
-    }
+
 }

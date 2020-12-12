@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import Entidades.*;
 
 /**
  *
@@ -25,13 +26,10 @@ public class MenuLogin extends JFrame {
     JFrame frame = new JFrame("Ventana Login");
     JTextField usuarioTexto;
     JTextField claveTexto;
-//
-//    public MenuLogin() {
-//    
-//    }
+    Usuarios u = new Usuarios();
 
     public void MenuLogin() {
-
+        
         JPanel panel = new JPanel();
 
         frame.setSize(350, 200);
@@ -46,7 +44,7 @@ public class MenuLogin extends JFrame {
         etiquetaUsuario.setBounds(40, 20, 80, 25);
         panel.add(etiquetaUsuario);
 
-//        JTextField
+        //JTextField
         usuarioTexto = new JTextField();
         usuarioTexto.setBounds(120, 20, 165, 25);
         panel.add(usuarioTexto);
@@ -64,8 +62,8 @@ public class MenuLogin extends JFrame {
         JButton botonAceptar = new JButton("Aceptar");
         botonAceptar.setBounds(80, 100, 80, 25);
         botonAceptar.setSize(new Dimension(85, 40));
+        
         //Evento
-
         botonAceptar.addActionListener(new AceptarBotonListener());
 
         panel.add(botonAceptar);
@@ -112,15 +110,14 @@ public class MenuLogin extends JFrame {
             try {
                 ResultSet resultado = comprobarLogin.comprobarLogin(sIdentificador, sClave);
                 Boolean existe = resultado.next();
-                String sTipoUsuario = "";
-                
+                                
                 if (existe) {
                     
-                    sTipoUsuario = resultado.getString(4);
-                    //MenuPrincipal menuPrincipal = new MenuPrincipal();
-                    //menuPrincipal.MostrarMenu(sTipoUsuario);
+                    u.setUserId(resultado.getString(2));
+                    u.setClave(resultado.getString(3));
+                    u.setTipoUsuario(resultado.getString(4));
                     
-                    Ventana v = new Ventana(sTipoUsuario);
+                    Vista v = new Vista(u);
                     frame.setVisible(false);
                     frame.dispose();
 
