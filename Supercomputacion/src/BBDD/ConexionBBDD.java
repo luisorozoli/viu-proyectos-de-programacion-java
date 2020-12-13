@@ -16,22 +16,16 @@ import java.sql.SQLException;
 public class ConexionBBDD {
 
     public String driver = "org.mariadb.jdbc.Driver";
-
     public String basedatos = "supercomputacion";
-
     public String host = "bbdd-21giin.city7zvgthab.us-east-1.rds.amazonaws.com";
-
     public String puerto = "3306";
-
     public String url = "jdbc:mysql://" + host + ":" + puerto + "/" + basedatos;
-
     public String usuario = "admin";
-
     public String password = "0Xzrc7&q77NT";
+    Connection con = null;
 
     public Connection ConexionBBDD() {
-        Connection con = null;
-
+        
         try {
             Class.forName(driver);
             con = DriverManager.getConnection(url, usuario, password);
@@ -40,8 +34,13 @@ public class ConexionBBDD {
             System.out.println("Error en la clase de conexión a la base de datos " + e);
             e.printStackTrace();
         }
-        
         return con;
     }
-
+    
+    public void desconectar() {
+        try {
+            con.close();
+        } catch (SQLException ex) {
+        }
+    }
 }

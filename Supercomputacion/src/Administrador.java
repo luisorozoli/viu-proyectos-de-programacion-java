@@ -16,8 +16,8 @@ public class Administrador extends AdministradorCentro {
     
     private String adminId;
     
-    public Administrador(String id, String pass, String tipo_usuario) {
-        super(id, pass, tipo_usuario);
+    public Administrador(int id, String identif, String pass, String tipo_usuario) {
+        super(id, identif, pass, tipo_usuario);
     }
     
     public void setAdminId(String id){

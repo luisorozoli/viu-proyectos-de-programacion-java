@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -82,8 +81,8 @@ public class MenuLogin extends JFrame {
     //Eventos Botones
     class CancelarBotonListener implements ActionListener {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Has pulsado el botón Cancelar");
             frame.setVisible(false);
             frame.dispose();
         }
@@ -91,12 +90,10 @@ public class MenuLogin extends JFrame {
 
     class AceptarBotonListener implements ActionListener {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Has pulsado el botón Aceptar");
             String sIdentificador = usuarioTexto.getText();
-            System.out.println("sUSUARIO: "+ sIdentificador);
             String sClave = claveTexto.getText();
-            System.out.println("sClave: "+sClave);
             Boolean bCamposVacios = false;
             
             
@@ -113,7 +110,8 @@ public class MenuLogin extends JFrame {
                                 
                 if (existe) {
                     
-                    u.setUserId(resultado.getString(2));
+                    u.setUserId(resultado.getInt(1));
+                    u.setIdentificafor(resultado.getString(2));
                     u.setClave(resultado.getString(3));
                     u.setTipoUsuario(resultado.getString(4));
                     

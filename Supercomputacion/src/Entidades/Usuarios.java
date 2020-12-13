@@ -12,8 +12,8 @@ package Entidades;
  */
 public class Usuarios {
     
-  
-    private String userId;
+    private int userId;
+    private String identificador;
     private String clave;
     private String tipo;
     
@@ -21,18 +21,27 @@ public class Usuarios {
         
     }
     
-    public Usuarios(String id, String pass, String tipo_usuario){
+    public Usuarios(int id, String identif, String pass, String tipo_usuario){
         userId = id;
+        identificador = identif;
         clave = pass;
         tipo = tipo_usuario;        
     }
         
-    public void setUserId(String id){
+    public void setUserId(int id){
         this.userId = id;
     }
-    
-    public String getUserId(){
+   
+    public int getUserId(){
         return userId;
+    }
+    
+    public void setIdentificafor(String identif){
+        this.identificador = identif;
+    }
+    
+    public String getIdentificador(){
+        return identificador;
     }
     
     public void setClave(String pass){

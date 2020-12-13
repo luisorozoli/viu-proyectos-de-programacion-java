@@ -33,7 +33,7 @@ public class Vista extends JFrame{
         lblBienvenida.setFont(new java.awt.Font("Arial", 1, 16));
         this.getContentPane().add(lblBienvenida, new AbsoluteConstraints(20, 20, 450, 20));
         
-        lblUsuario = new JLabel("Usuario: "+ u.getUserId());
+        lblUsuario = new JLabel("Usuario: "+ u.getIdentificador());
         lblUsuario.setFont(new java.awt.Font("Arial", 1, 12));
         this.getContentPane().add(lblUsuario, new AbsoluteConstraints(20, 50, 450, 20));
         
@@ -83,6 +83,7 @@ public class Vista extends JFrame{
     
     class BotonUsuariosListener implements ActionListener {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             VistaUsuarios vu = new VistaUsuarios();
         }
@@ -90,6 +91,7 @@ public class Vista extends JFrame{
     
     class BotonCentrosListener implements ActionListener {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             VistaCentros vc = new VistaCentros();
         }
@@ -97,6 +99,7 @@ public class Vista extends JFrame{
     
     class BotonTrabajosListener implements ActionListener {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             VistaTrabajos vt = new VistaTrabajos();
         }
@@ -104,6 +107,7 @@ public class Vista extends JFrame{
     
     class BotonInformacionListener implements ActionListener {
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             VistaInformacion vi = new VistaInformacion();
         }
