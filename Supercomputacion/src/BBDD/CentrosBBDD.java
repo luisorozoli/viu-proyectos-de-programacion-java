@@ -5,7 +5,7 @@
  */
 package BBDD;
 
-import Entidades.Trabajos;
+import Entidades.Centros;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,17 +16,17 @@ import java.sql.Statement;
  *
  * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
  */
-public class TrabajosBBDD {
+public class CentrosBBDD {
 
     private Statement st = null;
     private ResultSet rs = null;
     private PreparedStatement pst = null;
     private ConexionBBDD conexion = new ConexionBBDD();
 
-    //Listar trabajos
-    public ResultSet listarTrabajos() throws SQLException {
+    //Listar centros
+    public ResultSet listarCentros() throws SQLException {
 
-        String sSQL = "SELECT * FROM trabajos";
+        String sSQL = "SELECT * FROM centros";
 
         try {
             Connection con = conexion.ConexionBBDD();
@@ -42,16 +42,17 @@ public class TrabajosBBDD {
         return rs;
     }
 
-    //Crear trabajo
-    public int crearTrabajo(Trabajos trabajo) throws SQLException {
+    //Crear centro
+    public int crearCentro(Centros centro) throws SQLException {
 
-        String sSQL = "INSERT INTO supercomputacion.trabajos(identificador,cantidadoperaciones,propietario)VALUES(?,?,?)";
+        String sSQL = "INSERT INTO supercomputacion.centros(identificador,capacidadprocesamiento,tamanomaxcola,administrador)VALUES(?,?,?,?)";
         Connection con = conexion.ConexionBBDD();
         pst = con.prepareStatement(sSQL);
         //Asignar parámetros
-        pst.setString(1, trabajo.getsIdentificadorTrab());
-        pst.setString(2, trabajo.getsCantidadOperaciones());
-        pst.setString(3, trabajo.getsPropietario());
+        pst.setString(1, centro.getsIdentificadorCentro());
+        pst.setString(2, centro.getsCapacidadProcesamiento());
+        pst.setString(3, centro.getsTamanoMaxCola());
+        pst.setString(4, centro.getsAdministrador());
 
         int iFilasInsertadas = pst.executeUpdate();
 
@@ -59,26 +60,27 @@ public class TrabajosBBDD {
 
     }
 
-    //Modificar trabajo
-    public int modificarTrabajo(String sIdTrabajo, Trabajos trabajo) throws SQLException {
-        String sSQL = "UPDATE trabajos set identificador = ?, cantidadoperaciones = ?, propietario = ? where idTrabajos = ?";
+    //Modificar centro
+    public int modificarCentro(String sIdCentro, Centros centro) throws SQLException {
+        String sSQL = "UPDATE centros set identificador = ?, capacidadprocesamiento = ?, tamanomaxcola = ?, administrador = ? where idcentro = ?";
         Connection con = conexion.ConexionBBDD();
         pst = con.prepareStatement(sSQL);
 
         //Asignar parámetros
-        pst.setString(1, trabajo.getsIdentificadorTrab());
-        pst.setString(2, trabajo.getsCantidadOperaciones());
-        pst.setString(3, trabajo.getsPropietario());
-        pst.setString(4, sIdTrabajo );
+        pst.setString(1, centro.getsIdentificadorCentro());
+        pst.setString(2, centro.getsCapacidadProcesamiento());
+        pst.setString(3, centro.getsTamanoMaxCola());
+        pst.setString(4, centro.getsAdministrador());
+        pst.setString(5, sIdCentro );
 
         int iFilasModificadas = pst.executeUpdate();
 
         return iFilasModificadas;
     }
     
-    //Eliminar trabajo
-    public int eliminarUsuario(String sIdTrabajo) throws SQLException {
-        String sSQL = "DELETE FROM trabajos WHERE idtrabajos = ?";
+    //Eliminar centro
+    public int eliminarUsuario(String sIdCentro) throws SQLException {
+        String sSQL = "DELETE FROM centros WHERE idcentro = ?";
         
         Connection con = conexion.ConexionBBDD();
         

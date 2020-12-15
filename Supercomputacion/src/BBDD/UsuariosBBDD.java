@@ -5,27 +5,23 @@
  */
 package BBDD;
 
+import Entidades.*;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.PreparedStatement;
-import Entidades.*;
 
 /**
  *
  * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
  */
-
-
-
 public class UsuariosBBDD {
     
     private Statement st = null;
     private ResultSet rs = null;
     private PreparedStatement pst = null;
     private ConexionBBDD conexion = new ConexionBBDD();
-    
     
     //Comprobar Login
     public ResultSet comprobarLogin(String sIdentificador, String sClave) throws SQLException {
@@ -63,7 +59,6 @@ public class UsuariosBBDD {
         return rs;
     }
     
-    
     //Crear usuario
     public boolean crearUsuario(String identif, String clave, String tipo) {
         try{
@@ -88,7 +83,6 @@ public class UsuariosBBDD {
         }
     }
     
-
     //Modificar usuario
     public boolean modificarUsuario(Usuarios u) throws SQLException {
 
@@ -110,7 +104,6 @@ public class UsuariosBBDD {
 
     }
 
-    
     //Eliminar usuario
     public boolean eliminarUsuario(int id) throws SQLException {
         try{
@@ -127,5 +120,4 @@ public class UsuariosBBDD {
             return false;
         }
     }
-   
 }
