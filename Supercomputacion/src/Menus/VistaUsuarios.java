@@ -39,6 +39,8 @@ public class VistaUsuarios extends JFrame {
     
     /**
      * Método contructor de la clase <strong>VistaUsuarios</strong>
+     * @param u Usuarios - Corresponde al usuario que está logueado y abre la
+     * ventana de <strong>Gestión de usuarios</strong>.
      */
     public VistaUsuarios(Usuarios u){
         

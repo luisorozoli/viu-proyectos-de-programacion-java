@@ -1,4 +1,4 @@
-import Menus.MenuLogin;
+import Menus.*;
 
 /**
  * Clase principal que inicia la ejecución del <strong>Sistema de Gestión de
@@ -11,6 +11,6 @@ public class supercomputacion{
                
         MenuLogin menuLogin = new MenuLogin();
         menuLogin.MenuLogin();
-
+        
     }
 }

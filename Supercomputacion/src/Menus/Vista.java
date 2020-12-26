@@ -6,6 +6,8 @@ import org.netbeans.lib.awtextra.AbsoluteLayout;
 import Entidades.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+
 
 /**
  * Clase que crea la ventana principal que se presenta luego del login exitoso
@@ -114,7 +116,10 @@ public class Vista extends JFrame{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            VistaCentros vc = new VistaCentros();
+            try {
+                VistaCentros vc = new VistaCentros(user);
+            } catch (SQLException ex) {
+            }
         }
     }
     

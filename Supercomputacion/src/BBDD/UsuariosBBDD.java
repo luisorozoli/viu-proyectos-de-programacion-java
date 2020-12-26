@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  * Clase utilizada para el acceso a los datos de la tabla <strong>usuarios</strong>
@@ -71,6 +72,42 @@ public class UsuariosBBDD {
             st.close();
         }
         return rs;
+    }
+    
+    
+    /**
+     * Método que realiza una consulta de los registros de la tabla de <strong>
+     * usuarios</strong> que sean AdministradorCentro
+     * @return lista ArrayList con todos los AdministradoreCentro de la tabla de <strong>
+     * usuarios</strong>.
+     * @throws SQLException 
+     */
+    public ArrayList<String> listarAdministradoresCentro() throws SQLException {
+        
+        ArrayList<String> lista = new ArrayList<String>();
+        
+        String sSQL = "SELECT * FROM usuarios WHERE tipousuario = 'AdministradorCentro'";
+        
+        try {
+            
+            Connection con = conexion.ConexionBBDD();
+            
+            st = con.createStatement();
+            rs = st.executeQuery(sSQL);
+            
+        } catch(SQLException ex) {
+        } finally {
+            st.close();
+        }
+        
+        try{
+            while(rs.next()){
+                lista.add(rs.getString(2));
+            }
+        } catch(Exception e){
+        }
+        
+        return lista;
     }
     
     
