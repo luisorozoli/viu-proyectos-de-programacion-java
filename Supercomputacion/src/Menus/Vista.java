@@ -14,9 +14,10 @@ import java.awt.event.ActionListener;
  */
 public class Vista extends JFrame{
     
-    
     JLabel lblBienvenida, lblUsuario, lblTipoUsuario, lblMensaje;
     JButton btnUsuarios, btnCentros, btnTrabajos, btnInformacion;
+    Usuarios user = new Usuarios();
+    
     
     /**
      * Método constructor de la clase <strong>Vista</strong>
@@ -24,6 +25,8 @@ public class Vista extends JFrame{
      * @param u Usuario. Dependiendo del tipo de usuario se muestran distintos botones
      */
     public Vista(Usuarios u){
+        
+        user = u;
         
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,7 +86,6 @@ public class Vista extends JFrame{
         btnCentros.addActionListener(new BotonCentrosListener());
         btnTrabajos.addActionListener(new BotonTrabajosListener());
         btnInformacion.addActionListener(new BotonInformacionListener());
-        
     }
     
     
@@ -97,7 +99,7 @@ public class Vista extends JFrame{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            VistaUsuarios vu = new VistaUsuarios();
+            VistaUsuarios vu = new VistaUsuarios(user);
         }
     }
     
@@ -144,6 +146,4 @@ public class Vista extends JFrame{
             VistaInformacion vi = new VistaInformacion();
         }
     }
-    
-    
 }

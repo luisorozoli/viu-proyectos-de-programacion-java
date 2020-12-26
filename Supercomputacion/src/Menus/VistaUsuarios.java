@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.*;
 import static javax.swing.SwingConstants.RIGHT;
 import javax.swing.table.DefaultTableModel;
@@ -11,8 +13,6 @@ import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import Entidades.*;
 import BBDD.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -34,12 +34,15 @@ public class VistaUsuarios extends JFrame {
     UsuariosBBDD daoUsuarios = new UsuariosBBDD();
     int userId;
     Usuarios user = new Usuarios();
+    Usuarios userp = new Usuarios();
     
     
     /**
      * Método contructor de la clase <strong>VistaUsuarios</strong>
      */
-    public VistaUsuarios(){
+    public VistaUsuarios(Usuarios u){
+        
+        userp = u;
         
         //Información para centrar la ventana en la pantalla
         Toolkit pantalla = Toolkit.getDefaultToolkit();
@@ -124,8 +127,7 @@ public class VistaUsuarios extends JFrame {
         btnLimpiar.addActionListener((ActionListener) new BotonLimpiarListener());
         tblDatos.addMouseListener((MouseListener) new MouseClic());
         
-        refrescarTabla();
-        
+        refrescarTabla();   
     }
     
     
@@ -146,20 +148,22 @@ public class VistaUsuarios extends JFrame {
             
             if(txtIdentificador.getText().equals("")){
                 JOptionPane.showMessageDialog(null, "El identificador no puede estar vacío");
+            } else if(txtIdentificador.getText().length()<1 || txtIdentificador.getText().length()>10 ){
+                JOptionPane.showMessageDialog(null, "El identificador debe tener entre 1 y 10 caracteres");
             } else if (txtClave.getText().equals("")){
                 JOptionPane.showMessageDialog(null, "La clave no puede estar vacía");
+            } else if(txtClave.getText().length()<4 || txtClave.getText().length()>8 ){
+                JOptionPane.showMessageDialog(null, "La clave debe tener entre 4 y 8 caracteres");
             } else {
                 
-                if(!daoUsuarios.crearUsuario(txtIdentificador.getText(), txtClave.getText(), cboTipoUsuario.getSelectedItem().toString())){
-                    JOptionPane.showMessageDialog(null, "No se insertó registro");
+                if(daoUsuarios.crearUsuario(txtIdentificador.getText(), txtClave.getText(), cboTipoUsuario.getSelectedItem().toString())){
+                    limpiarCampos();
+                    refrescarTabla();
+                }else{
+                    JOptionPane.showMessageDialog(null, "Identificador existente - Intente con un identificador distinto");
                 }
-                
-                limpiarCampos();
-                refrescarTabla(); 
             }
-            
         }
-
     }
     
     
@@ -177,22 +181,25 @@ public class VistaUsuarios extends JFrame {
         
         @Override
         public void actionPerformed(ActionEvent e) {
-                        
-            int x = JOptionPane.showConfirmDialog(null, "ESTA SEGURO DE ELIMINAR ESTE USUARIO?");
-            if(x == 0){
-                try {
-                    if(daoUsuarios.eliminarUsuario(userId)){
-                        limpiarCampos();
-                        refrescarTabla();
-                        
-                    } else{
-                        JOptionPane.showMessageDialog(null, "No se pudo eliminar el usuario");
+            
+            if(userp.getUserId() == userId){
+                JOptionPane.showMessageDialog(null, "No es posible eliminar al usuario actual");
+            } else{
+                int x = JOptionPane.showConfirmDialog(null, "ESTA SEGURO DE ELIMINAR ESTE USUARIO?");
+                if(x == 0){
+                    try {
+                        if(daoUsuarios.eliminarUsuario(userId)){
+                            limpiarCampos();
+                            refrescarTabla();
+                            
+                        } else{
+                            JOptionPane.showMessageDialog(null, "No se pudo eliminar el usuario");
+                        }
+                    } catch (SQLException ex) {
                     }
-                } catch (SQLException ex) {
                 }
             }
         }
-        
     }
     
     
@@ -210,11 +217,17 @@ public class VistaUsuarios extends JFrame {
         
         @Override
         public void actionPerformed(ActionEvent e) {
-
-            if(txtIdentificador.getText().equals("")){
-                JOptionPane.showMessageDialog(null, "El identificador no puede estar vacío");
+            
+            if(userp.getUserId() == userId){
+                JOptionPane.showMessageDialog(null, "No es posible modificar al usuario actual"); 
+            } else if(txtIdentificador.getText().equals("")){
+                JOptionPane.showMessageDialog(null, "El identificador no puede estar vacío");           
+            } else if(txtIdentificador.getText().length()<1 || txtIdentificador.getText().length()>10 ){
+                JOptionPane.showMessageDialog(null, "El identificador debe tener entre 1 y 10 caracteres");
             } else if (txtClave.getText().equals("")){
                 JOptionPane.showMessageDialog(null, "La clave no puede estar vacía");
+            } else if(txtClave.getText().length()<4 || txtClave.getText().length()>8 ){
+                JOptionPane.showMessageDialog(null, "La clave debe tener entre 4 y 8 caracteres");
             } else {
                 
                 user.setUserId(userId);
@@ -229,16 +242,13 @@ public class VistaUsuarios extends JFrame {
                             limpiarCampos();
                             refrescarTabla();
                         } else{
-                            JOptionPane.showMessageDialog(null, "No se pudo modificar el usuario");
+                            JOptionPane.showMessageDialog(null, "Identificador existente - Intente con un identificador distinto");
                         }
                     } catch (SQLException ex) {
                     }
                 }
-                
             }
-  
         }
-        
     }
     
     
@@ -255,7 +265,6 @@ public class VistaUsuarios extends JFrame {
         public void actionPerformed(ActionEvent e) {
             limpiarCampos();
         }
-
     }
     
     
@@ -281,27 +290,22 @@ public class VistaUsuarios extends JFrame {
             
             btnEliminar.setEnabled(true);
             btnModificar.setEnabled(true);
-        
         }
 
         @Override
         public void mousePressed(MouseEvent e) {
-            
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
-            
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            
         }
     
     }   
@@ -333,7 +337,6 @@ public class VistaUsuarios extends JFrame {
             
         } catch (SQLException ex) {
         }
-        
     }
 
     
@@ -349,5 +352,4 @@ public class VistaUsuarios extends JFrame {
         btnEliminar.setEnabled(false);
         btnModificar.setEnabled(false);
     }
-    
 }

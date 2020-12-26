@@ -130,7 +130,6 @@ public class UsuariosBBDD {
         } catch (SQLException ex) {
             return false;
         }
-
     }
 
 
