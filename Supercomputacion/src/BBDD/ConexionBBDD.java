@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package BBDD;
 
 import java.sql.Connection;
@@ -10,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- *
+ * Clase utilizada para conectarse y desconectarse de la base de datos de AWS.
  * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
  */
 public class ConexionBBDD {
@@ -23,7 +18,12 @@ public class ConexionBBDD {
     public String usuario = "admin";
     public String password = "0Xzrc7&q77NT";
     Connection con = null;
-
+    
+    
+    /**
+     * Método utilizado para crear una conexión con la base de datos
+     * @return con Connection. Es la conexión con la base de datos
+     */
     public Connection ConexionBBDD() {
         
         try {
@@ -37,6 +37,10 @@ public class ConexionBBDD {
         return con;
     }
     
+    
+    /**
+     * Método que realiza el cierre y desconexión de la base de datos
+     */
     public void desconectar() {
         try {
             con.close();

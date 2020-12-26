@@ -1,17 +1,16 @@
-
 package Menus;
-
-//Crea la ventana de Trabajos que se abre al hacer clic en el boton Trabajos
-//de la ventana principal
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 
-
+/**
+ * Crea la ventana de Trabajos que se abre al hacer clic en el boton Trabajos  
+ * de la ventana principal
+ * 
+ * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
+ */
 public class VistaTrabajos extends JFrame {
     
     //Declaración de botones y otros componentes

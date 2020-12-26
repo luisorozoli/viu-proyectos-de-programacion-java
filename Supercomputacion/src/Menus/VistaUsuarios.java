@@ -1,8 +1,4 @@
-
 package Menus;
-
-//Crea la ventana de Usuarios que se abre al hacer clic en el boton Usuarios
-//de la ventana principal
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -20,6 +16,12 @@ import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Clase que crea la ventana de <strong>Gestión de Usuarios</strong> que se abre al hacer
+ * clic en el boton <strong>Usuarios</strong> de la ventana principal.
+ * 
+ * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
+ */
 public class VistaUsuarios extends JFrame {
     
     JLabel lblBienvenida, lblId, lblClave, lblTipoUsuario;
@@ -33,6 +35,10 @@ public class VistaUsuarios extends JFrame {
     int userId;
     Usuarios user = new Usuarios();
     
+    
+    /**
+     * Método contructor de la clase <strong>VistaUsuarios</strong>
+     */
     public VistaUsuarios(){
         
         //Información para centrar la ventana en la pantalla
@@ -51,7 +57,7 @@ public class VistaUsuarios extends JFrame {
         setLayout(new AbsoluteLayout());
         
         
-        //Se agregan los componentes de la ventana de Gestión de usuarios
+        //Se agregan los componentes de la ventana de Gestión de Usuarios
         lblBienvenida = new JLabel("Gestión de Usuarios");
         lblBienvenida.setFont(new java.awt.Font("Arial", 1, 16));
         this.getContentPane().add(lblBienvenida, new AbsoluteConstraints(20, 20, 450, 20));
@@ -99,7 +105,7 @@ public class VistaUsuarios extends JFrame {
         this.getContentPane().add(btnLimpiar, new AbsoluteConstraints(360, 150, 100, 20));
         
         
-        //Se crea la tabla donde se muestran los usuarios
+        //Se crea la tabla donde se muestra el listado de usuarios
         tblDatos = new JTable();
         scroll = new JScrollPane();
         model = new DefaultTableModel();
@@ -122,7 +128,17 @@ public class VistaUsuarios extends JFrame {
         
     }
     
-    //Se crea la clase que implementa el actionPerformed del botón Agregar    
+    
+    /**
+     * Clase que implementa el <strong>ActionListener</strong> del botón
+     * <strong>Agregar</strong>.<br>
+     * Cuando se hace clic en el botón <strong>Agregar</strong>, luego de
+     * validar la información contenida en los campos, se procede a crear el
+     * usuario en la tabla de <strong>Usuarios</strong> de la base de datos.<br>
+     * Si se pudo crear el usuario, se limpian todos los campos de la ventana y se
+     * refresca la información de la tabla de usuarios para mostrar también el
+     * usuario recientemente creado.
+     */
     class BotonAgregarListener implements ActionListener {
 
         @Override
@@ -147,7 +163,16 @@ public class VistaUsuarios extends JFrame {
     }
     
     
-    //Se crea la clase que implementa el actionPerformed del botón Eliminar
+    /**
+     * Clase que implementa el <strong>ActionListener</strong> del botón
+     * <strong>Eliminar</strong>.<br>
+     * Cuando se hace clic en el botón <strong>Eliminar</strong>, luego de
+     * solicitar la validación del usuario de que se está seguro de querer
+     * eliminarlo, se procede a eliminarlo de la tabla de <strong>Usuarios</strong>.<br>
+     * Si se pudo eliminar el usuario, se limpian todos los campos de la ventana
+     * y se refresca la información de la tabla de usuarios para que no se
+     * muestre el usuario eliminado.
+     */
     class BotonEliminarListener implements ActionListener {
         
         @Override
@@ -171,7 +196,16 @@ public class VistaUsuarios extends JFrame {
     }
     
     
-    //Se crea la clase que implementa el actionPerformed del botón Modificar
+    /**
+     * Clase que implementa el <strong>ActionListener</strong> del botón
+     * <strong>Modificar</strong>.<br>
+     * Cuando se hace clic en el botón <strong>Modificar</strong>, luego de
+     * realizar las validaciones correspondientes, se procede a modificarlo
+     * en la tabla de <strong>Usuarios</strong>.<br>
+     * Si se pudo modificar el usuario, se limpian todos los campos de la ventana
+     * y se refresca la información de la tabla de usuarios para que se
+     * muestre la información actualizada.
+     */
     class BotonModificarListener implements ActionListener {
         
         @Override
@@ -208,7 +242,13 @@ public class VistaUsuarios extends JFrame {
     }
     
     
-    //Se crea la clase que implementa el actionPerformed del botón Limpiar
+    /**
+     * Clase que implementa el <strong>ActionListener</strong> del botón
+     * <strong>Limpiar</strong>.<br>
+     * Cuando se hace clic en el botón <strong>Limpiar</strong>, se limpian
+     * todos los campos de la ventana, con la excepción de la tabla que muestra
+     * la lista de usuarios.
+     */
     class BotonLimpiarListener implements ActionListener {
 
         @Override
@@ -219,7 +259,14 @@ public class VistaUsuarios extends JFrame {
     }
     
     
-    //Se crea la clase que implementa el método mouseClicked sobre la tabla
+    /**
+     * Clase que implementa el <strong>MouseListener</strong> del ratón cuando
+     * se hace clic en una fila de la tabla que muestra la lista de
+     * <strong>Usuarios</strong>.<br>
+     * Cuando se hace clic en un fila de la tabla, se carga en los componentes
+     * de la vista la información del usuario seleccionado y se habilitan los 
+     * botones <strong>Eliminar</strong> y <strong>Modificar</strong>.
+     */
     class MouseClic implements MouseListener {
         
         @Override
@@ -260,7 +307,10 @@ public class VistaUsuarios extends JFrame {
     }   
 
     
-    //Carga los datos de los usuarios en la tabla
+    /**
+     * Método que carga y refresca la información contenida en la tabla que
+     * lista a los <strong>Usuarios</strong>.
+     */
     public void refrescarTabla(){
         while(this.model.getRowCount()>0){
             this.model.removeRow(0);
@@ -287,7 +337,10 @@ public class VistaUsuarios extends JFrame {
     }
 
     
-    //Limpia los campos de la ventana de usuarios
+    /**
+     * Método que limpia los campos de la ventana de <strong>Gestión de Usuarios</strong>
+     * y deshabilita los botones <strong>Eliminar</strong> y <strong>Modificar</strong>.
+     */
     public void limpiarCampos(){
         txtIdentificador.setText("");
         txtClave.setText("");

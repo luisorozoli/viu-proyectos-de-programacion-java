@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package BBDD;
 
 import Entidades.*;
@@ -13,7 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- *
+ * Clase utilizada para el acceso a los datos de la tabla <strong>usuarios</strong>
+ * de la base de datos.
  * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
  */
 public class UsuariosBBDD {
@@ -23,7 +19,18 @@ public class UsuariosBBDD {
     private PreparedStatement pst = null;
     private ConexionBBDD conexion = new ConexionBBDD();
     
-    //Comprobar Login
+
+    /**
+     * Método utilizado para comprobar el login.<br>
+     * Realiza una consulta de todos los <strong>usuarios</strong> según el 
+     * <strong>identificador</strong> y <strong>clave</strong> recibidos como 
+     * parámetros.
+     * @param sIdentificador String con el identificador del usuario.
+     * @param sClave Striong que contiene la clave de acceso del usuario.
+     * @return rs ResultSet con los usuarios que cumplen con el criterio de
+     * consulta.
+     * @throws SQLException 
+     */
     public ResultSet comprobarLogin(String sIdentificador, String sClave) throws SQLException {
         
         String sSQL = "SELECT * from usuarios where identificador  = ? and clave = ?";
@@ -40,7 +47,14 @@ public class UsuariosBBDD {
         return rs;
     }
 
-    //Listar usuarios
+    
+    /**
+     * Método que realiza una consulta de todos los registros de la tabla de <strong>
+     * usuarios</strong>.
+     * @return rs ResultSet con todos los registros de la tabla de <strong>
+     * usuarios</strong>.
+     * @throws SQLException 
+     */
     public ResultSet listarUsuarios() throws SQLException {
         
         String sSQL = "SELECT * FROM usuarios";
@@ -59,7 +73,15 @@ public class UsuariosBBDD {
         return rs;
     }
     
-    //Crear usuario
+    
+    /**
+     * Método que inserta un nuevo registro en la tabla de <strong>usuarios</strong>
+     * @param identif String con el <strong>identificador</strong> del usuario
+     * @param clave String con la <strong>clave</strong> del usuario
+     * @param tipo String con el tipo de usuario: <i>Administrador</i>,
+     * <i>AdministradorCentro</i>, <i>Usuario</i>.
+     * @return true o false dependiendo de si se pudo insertar el registro o no.
+     */
     public boolean crearUsuario(String identif, String clave, String tipo) {
         try{
            
@@ -83,7 +105,14 @@ public class UsuariosBBDD {
         }
     }
     
-    //Modificar usuario
+
+    /**
+     * Método que realiza el <i>update</i> de un nuevo registro en la tabla de
+     * <strong>usuarios</strong>.
+     * @param u Usuario que será modificado
+     * @return true o false dependiendo de si se pudo o no realizar el <i>update</i>.
+     * @throws SQLException 
+     */
     public boolean modificarUsuario(Usuarios u) throws SQLException {
 
         try {
@@ -104,7 +133,13 @@ public class UsuariosBBDD {
 
     }
 
-    //Eliminar usuario
+
+    /**
+     * Método que elimina un registro de la tabla de <strong>usuarios</strong>.
+     * @param id userId del usuario que debe ser eliminado.
+     * @return true o false dependiendo de si se pudo o no eliminar el usuario.
+     * @throws SQLException 
+     */
     public boolean eliminarUsuario(int id) throws SQLException {
         try{
             String sSQL = "DELETE FROM usuarios WHERE idusuario = ?";

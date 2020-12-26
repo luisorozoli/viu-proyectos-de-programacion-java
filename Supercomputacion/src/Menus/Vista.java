@@ -1,7 +1,4 @@
-
 package Menus;
-
-//Crea la ventana principal que se presenta luego del login exitoso
 
 import javax.swing.*;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
@@ -10,14 +7,22 @@ import Entidades.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
+/**
+ * Clase que crea la ventana principal que se presenta luego del login exitoso
+ * 
+ * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
+ */
 public class Vista extends JFrame{
     
     
     JLabel lblBienvenida, lblUsuario, lblTipoUsuario, lblMensaje;
     JButton btnUsuarios, btnCentros, btnTrabajos, btnInformacion;
     
-    @SuppressWarnings("OverridableMethodCallInConstructor")
+    /**
+     * Método constructor de la clase <strong>Vista</strong>
+     * 
+     * @param u Usuario. Dependiendo del tipo de usuario se muestran distintos botones
+     */
     public Vista(Usuarios u){
         
         setVisible(true);
@@ -81,6 +86,13 @@ public class Vista extends JFrame{
         
     }
     
+    
+    /**
+     * Clase que implementa el método <strong>ActionListener</strong> del botón
+     * <strong>Usuarios</strong>.<br>
+     * Si se hace clic en el botón <strong>Usuarios</strong>, se abre la ventana
+     * de <strong>Gestión de Usuarios</strong>.
+     */
     class BotonUsuariosListener implements ActionListener {
 
         @Override
@@ -89,6 +101,13 @@ public class Vista extends JFrame{
         }
     }
     
+    
+    /**
+     * Clase que implementa el <strong>ActionListener</strong> del botón de
+     * <strong>Centros</strong>.<br>
+     * Si se hace clic en el botón <strong>Centros</strong>,
+     * se abre la ventana de <strong>Gestión de Centros</strong>.
+     */
     class BotonCentrosListener implements ActionListener {
 
         @Override
@@ -97,6 +116,12 @@ public class Vista extends JFrame{
         }
     }
     
+    /**
+     * Clase que implementa el <strong>ActionListener</strong> del botón de
+     * <strong>Trabajos</strong>.<br>
+     * Si se hace clic en el botón <strong>Trabajos</strong>, se abre la ventana
+     * de <strong>Gestión de Trabajos</strong>.
+     */
     class BotonTrabajosListener implements ActionListener {
 
         @Override
@@ -105,6 +130,13 @@ public class Vista extends JFrame{
         }
     }
     
+    
+    /**
+     * Clase que implementa el <strong>ActionListener</strong> del botón
+     * <strong>Información</strong>.<br>
+     * Si se hace clic en el botón <strong>Información</strong>, se abre la
+     * ventana de <strong>Información</strong>.
+     */
     class BotonInformacionListener implements ActionListener {
 
         @Override

@@ -1,16 +1,16 @@
-
 package Menus;
-
-//Crea la ventana de Centros que se abre al hacer clic en el boton Centros
-//de la ventana principal
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 
+/**
+ * Crea la ventana de Centros que se abre al hacer clic en el boton Centros 
+ * de la ventana principal
+ * 
+ * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
+ */
 public class VistaCentros extends JFrame {
     
     //Aca declaro las etiquetas, botones y demás componentes

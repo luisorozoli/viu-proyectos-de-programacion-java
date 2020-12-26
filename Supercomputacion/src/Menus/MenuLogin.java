@@ -17,7 +17,8 @@ import javax.swing.JTextField;
 import Entidades.*;
 
 /**
- *
+ * Crea la clase que gestiona el login de los usuarios.
+ * 
  * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
  */
 public class MenuLogin extends JFrame {
