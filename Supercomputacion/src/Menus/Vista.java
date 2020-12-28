@@ -133,7 +133,7 @@ public class Vista extends JFrame{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            VistaTrabajos vt = new VistaTrabajos();
+            VistaTrabajos vt = new VistaTrabajos(user);
         }
     }
     
