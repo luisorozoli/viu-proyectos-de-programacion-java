@@ -18,7 +18,7 @@ public class UsuariosBBDD {
     private Statement st = null;
     private ResultSet rs = null;
     private PreparedStatement pst = null;
-    private ConexionBBDD conexion = new ConexionBBDD();
+    private final ConexionBBDD conexion = new ConexionBBDD();
     
 
     /**
@@ -84,7 +84,7 @@ public class UsuariosBBDD {
      */
     public ArrayList<String> listarAdministradoresCentro() throws SQLException {
         
-        ArrayList<String> lista = new ArrayList<String>();
+        ArrayList<String> lista = new ArrayList<>();
         
         String sSQL = "SELECT * FROM usuarios WHERE tipousuario = 'AdministradorCentro'";
         
@@ -104,7 +104,7 @@ public class UsuariosBBDD {
             while(rs.next()){
                 lista.add(rs.getString(2));
             }
-        } catch(Exception e){
+        } catch(SQLException e){
         }
         
         return lista;
@@ -154,14 +154,13 @@ public class UsuariosBBDD {
 
         try {
             String sql = "UPDATE usuarios SET identificador=?, clave=?, tipousuario=? WHERE idusuario =?";
-            PreparedStatement ps = conexion.ConexionBBDD().prepareStatement(sql);
-            ps.setString(1, u.getIdentificador());
-            ps.setString(2, u.getClave());
-            ps.setString(3, u.getTipoUsuario());
-            ps.setInt(4, u.getUserId());
-            ps.execute();
-            ps.close();
-            ps = null;
+            try (PreparedStatement ps = conexion.ConexionBBDD().prepareStatement(sql)) {
+                ps.setString(1, u.getIdentificador());
+                ps.setString(2, u.getClave());
+                ps.setString(3, u.getTipoUsuario());
+                ps.setInt(4, u.getUserId());
+                ps.execute();
+            }
             conexion.desconectar();
             return true;
         } catch (SQLException ex) {
@@ -180,11 +179,10 @@ public class UsuariosBBDD {
         try{
             String sSQL = "DELETE FROM usuarios WHERE idusuario = ?";
             
-            PreparedStatement ps = conexion.ConexionBBDD().prepareStatement(sSQL);
-            ps.setInt(1, id);
-            ps.execute();
-            ps.close();
-            ps = null;
+            try (PreparedStatement ps = conexion.ConexionBBDD().prepareStatement(sSQL)) {
+                ps.setInt(1, id);
+                ps.execute();
+            }
             conexion.desconectar();
             return true;
         } catch (SQLException ex) {

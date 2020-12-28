@@ -1,83 +1,127 @@
 package Entidades;
 
 /**
- * Define la clase Centros
+ * Define la clase <strong>Centros</strong>
  * 
  * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
  */
 public class Centros {
     
+    private int idCentro;
     private String sIdentificadorCentro;
-    private String sCapacidadProcesamiento;
-    private String sTamanoMaxCola;
+    private int capacidadProcesamiento;
+    private int tamanoMaxCola;
     private String sAdministrador;
-    private String sIdCentro;
-
-    public String getsIdCentro() {
-        return sIdCentro;
+    
+    
+    /**
+     * Método constructor de la clase <strong>Centros</strong>.
+     */
+    public Centros() {        
     }
     
-    public Centros() {
-        
-    }
-    public Centros(String sIdentificadorCentro, String sCantidadOperaciones, String sPropietario){
-               this.sIdentificadorCentro = sIdentificadorCentro;
-               this.sCapacidadProcesamiento = sCapacidadProcesamiento;
-               this.sTamanoMaxCola = sTamanoMaxCola;
-               this.sAdministrador = sAdministrador;
-    }
-
+    
     /**
-     * @return the sIdentificadorCentro
+     * Método constructor de la clase <strong>Centros</strong>.
+     * @param idCentro int que representa el identificador único y autonumérico del centro
+     * @param sIdentificadorCentro String con el identificador alfanumérico del centro. Tiene un máximo de 30 caracteres
+     * @param capacidadProcesamiento int que representa la capacidad de procesamiento del centro
+     * @param tamanoMaxCola int que representa el tamaño máximo de la cola del centro
+     * @param sAdministrador String con el identificador del Administrador del centro
+     */
+    public Centros(int idCentro, String sIdentificadorCentro, int capacidadProcesamiento, int tamanoMaxCola, String sAdministrador){
+        this.idCentro = idCentro;
+        this.sIdentificadorCentro = sIdentificadorCentro;
+        this.capacidadProcesamiento = capacidadProcesamiento;
+        this.tamanoMaxCola = tamanoMaxCola;
+        this.sAdministrador = sAdministrador;
+    }
+    
+    
+    /**
+     * Método getter utilizado para obtener el <strong>idCentro</strong>.
+     * @return int idCentro
+     */
+    public int getIdCentro() {
+        return idCentro;
+    }
+    
+    
+    /**
+     * Método setter utilizado para establecer <strong>idCentro</strong> de un centro
+     * @param idCentro Indica el <strong>idCentro</strong> que debe tener el centro
+     */
+    public void setIdCentro(int idCentro) {
+        this.idCentro = idCentro;
+    }
+    
+    
+    /**
+     * Método getter utilizado para obtener el <strong>sIdentificadorCentro</strong>.
+     * @return String sIdentificadorCentro
      */
     public String getsIdentificadorCentro() {
         return sIdentificadorCentro;
     }
-
+    
+    
     /**
-     * @param sIdentificadorCentro the sIdentificadorCentro to set
+     * Método setter utilizado para establecer <strong>sIdentificadorCentro</strong> de un centro
+     * @param sIdentificadorCentro Indica el <strong>sIdentificadorCentro</strong> que debe tener el centro
      */
     public void setsIdentificadorCentro(String sIdentificadorCentro) {
         this.sIdentificadorCentro = sIdentificadorCentro;
     }
-
-    /**
-     * @return the sCapacidadProcesamiento
-     */
-    public String getsCapacidadProcesamiento() {
-        return sCapacidadProcesamiento;
-    }
-
-    /**
-     * @param sCapacidadProcesamiento the sCapacidadProcesamiento to set
-     */
-    public void setsCapacidadProcesamiento(String sCapacidadProcesamiento) {
-        this.sCapacidadProcesamiento = sCapacidadProcesamiento;
-    }
-
-    /**
-     * @return the sTamanoMaxCola
-     */
-    public String getsTamanoMaxCola() {
-        return sTamanoMaxCola;
-    }
-
-    /**
-     * @param sTamanoMaxCola the sTamanoMaxCola to set
-     */
-    public void setsTamanoMaxCola(String sTamanoMaxCola) {
-        this.sTamanoMaxCola = sTamanoMaxCola;
-    }
+    
     
     /**
-     * @return the sAdministrador
+     * Método getter utilizado para obtener la <strong>capacidadProcesamiento</strong>.
+     * @return int capacidadProcesamiento
+     */
+    public int getCapacidadProcesamiento() {
+        return capacidadProcesamiento;
+    }
+    
+    
+    /**
+     * Método setter utilizado para establecer <strong>capacidadProcesamiento</strong> de un centro
+     * @param capacidadProcesamiento Indica el <strong>capacidadProcesamiento</strong> que debe tener el centro
+     */
+    public void setCapacidadProcesamiento(int capacidadProcesamiento) {
+        this.capacidadProcesamiento = capacidadProcesamiento;
+    }
+    
+    
+    /**
+     * Método getter utilizado para obtener la <strong>tamanoMaxCola</strong>.
+     * @return int tamanoMaxCola
+     */
+    public int getTamanoMaxCola() {
+        return tamanoMaxCola;
+    }
+    
+    
+    /**
+     * Método setter utilizado para establecer <strong>tamanoMaxCola</strong> de un centro
+     * @param tamanoMaxCola Indica el <strong>tamanoMaxCola</strong> que debe tener el centro
+     */
+    public void setTamanoMaxCola(int tamanoMaxCola) {
+        this.tamanoMaxCola = tamanoMaxCola;
+    }
+    
+    
+    /**
+     * Método getter utilizado para obtener el <strong>sAdministrador</strong>.
+     * @return String sAdministrador
      */
     public String getsAdministrador() {
         return sAdministrador;
     }
-
+    
+    
     /**
-     * @param sAdministrador the sAdministrador to set
+     * Método setter utilizado para establecer el <strong>sAdministrador</strong> de un centro
+     * @param sAdministrador Indica el <strong>sAdministrador</strong> que debe tener el centro
      */
     public void setsAdministrador(String sAdministrador) {
         this.sAdministrador = sAdministrador;
