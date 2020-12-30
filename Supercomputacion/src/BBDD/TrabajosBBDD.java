@@ -23,7 +23,7 @@ public class TrabajosBBDD {
     private PreparedStatement pst = null;
     private ConexionBBDD conexion = new ConexionBBDD();
 
-    //Listar trabajos
+    //Listar trabajos (Administrador)
     public ResultSet listarTrabajos() throws SQLException {
 
         String sSQL = "SELECT * FROM trabajos";
@@ -69,22 +69,61 @@ public class TrabajosBBDD {
         pst.setString(1, trabajo.getsIdentificadorTrab());
         pst.setString(2, trabajo.getsCantidadOperaciones());
         pst.setString(3, trabajo.getsPropietario());
-        pst.setString(4, sIdTrabajo );
+        pst.setString(4, sIdTrabajo);
 
         int iFilasModificadas = pst.executeUpdate();
 
         return iFilasModificadas;
     }
-    
+
     //Eliminar trabajo
-    public int eliminarUsuario(String sIdTrabajo) throws SQLException {
+    public int eliminarTrabajo(String sIdTrabajo) throws SQLException {
         String sSQL = "DELETE FROM trabajos WHERE idtrabajos = ?";
-        
+
         Connection con = conexion.ConexionBBDD();
-        
+
         pst = con.prepareStatement(sSQL);
         int filasEliminadas = pst.executeUpdate();
-        
+
         return filasEliminadas;
+    }
+
+    //Mostrar los trabajos de un usuario
+    public ResultSet listarTrabajosUsuario(int sIdUsuario) throws SQLException {
+        String sSQL = "select * from trabajos where idusuario = ?";
+        try {
+            Connection con = conexion.ConexionBBDD();
+
+            st = con.createStatement();
+            rs = st.executeQuery(sSQL);
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            st.close();
+        }
+
+        return rs;
+    }
+    
+    public ResultSet listarTrabajosCentro(String sIdUsuario) throws SQLException {
+        String sSQL ="select tra.*, cen.*, usu.* from trabajos tra "
+                + "inner join centros cen on cen.idcentro = tra.idcentro\n" +
+        "inner join usuarios usu on usu.identificador = cen.administrador and usu.idusuario = ?";
+        
+        try {
+            Connection con = conexion.ConexionBBDD();
+
+            st = con.createStatement();
+            rs = st.executeQuery(sSQL);
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            st.close();
+        }
+
+        return rs;
+        
     }
 }

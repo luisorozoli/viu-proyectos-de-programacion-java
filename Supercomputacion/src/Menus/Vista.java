@@ -7,6 +7,8 @@ import Entidades.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -119,6 +121,7 @@ public class Vista extends JFrame{
             try {
                 VistaCentros vc = new VistaCentros(user);
             } catch (SQLException ex) {
+                ex.printStackTrace();
             }
         }
     }
@@ -133,7 +136,11 @@ public class Vista extends JFrame{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            VistaTrabajos vt = new VistaTrabajos(user);
+            try {
+                VistaTrabajos vt = new VistaTrabajos(user);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
     

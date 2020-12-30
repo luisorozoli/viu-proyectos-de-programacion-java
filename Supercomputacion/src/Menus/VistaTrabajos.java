@@ -1,10 +1,16 @@
 package Menus;
 
-import BBDD.TrabajosBBDD;
-import BBDD.UsuariosBBDD;
-import Entidades.*;
+import BBDD.*;
+import Entidades.Trabajos;
+import Entidades.Usuarios;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.*;
 import static javax.swing.SwingConstants.RIGHT;
@@ -21,23 +27,25 @@ import org.netbeans.lib.awtextra.AbsoluteLayout;
 public class VistaTrabajos extends JFrame {
 
     //Declaración de botones y otros componentes
-    JLabel lblBienvenida, lblId, lblCantidad, lblAdministrador;
-    JTextField txtIdentificador;
+    JLabel lblBienvenida, lblId, lblCantidad, lblPropietario;
+    JTextField txtIdentificador, txtPropietario;
     JSpinner spnCantidad;
-    JComboBox cboAdministrador;
+//    JComboBox cboAdministrador;
     JScrollPane scroll;
     DefaultTableModel model;
     JTable tblDatos;
     JButton btnAgregar, btnEliminar, btnModificar, btnLimpiar;
     int trabajoId;
+    JComboBox cboCentros;
 
     Usuarios userp = new Usuarios();
     Trabajos trabajo = new Trabajos();
 
     UsuariosBBDD daoUsuarios = new UsuariosBBDD();
     TrabajosBBDD daoTrabajos = new TrabajosBBDD();
+    CentrosBBDD daoCentros = new CentrosBBDD();
 
-    public VistaTrabajos(Usuarios u) {
+    public VistaTrabajos(Usuarios u) throws SQLException {
 
         userp = u;
         //Información para centrar la ventana en la pantalla
@@ -71,26 +79,43 @@ public class VistaTrabajos extends JFrame {
         this.getContentPane().add(lblCantidad, new AbsoluteConstraints(10, 90, 100, 20));
 
         //Usuario/propietario trabajo
-        lblAdministrador = new JLabel("Usuario Prop.:");
-        lblAdministrador.setHorizontalAlignment(RIGHT);
-        this.getContentPane().add(lblAdministrador, new AbsoluteConstraints(10, 120, 100, 20));
+        lblPropietario = new JLabel("Usuario Prop.:");
+        lblPropietario.setHorizontalAlignment(RIGHT);
+        this.getContentPane().add(lblPropietario, new AbsoluteConstraints(10, 120, 100, 20));
 
         //CUADROS DE TEXTO
         txtIdentificador = new JTextField();
         this.getContentPane().add(txtIdentificador, new AbsoluteConstraints(120, 60, 200, 20));
         spnCantidad = new JSpinner();
         this.getContentPane().add(spnCantidad, new AbsoluteConstraints(120, 90, 200, 20));
+        txtPropietario = new JTextField();
+        this.getContentPane().add(txtPropietario, new AbsoluteConstraints(120, 120, 200, 20));
+        
+        //Se crea el combo de los centros a los que pertenecen los trabajos
+        ArrayList<String> listaCentrosTrabajos = new ArrayList<>();
+        listaCentrosTrabajos = (ArrayList<String>)daoCentros.listarCentrosTrabajos();
+        
+        cboCentros = new JComboBox();
+        
+        for (int i=0;i<listaCentrosTrabajos.size();i++) {
+            cboCentros.addItem(listaCentrosTrabajos.get(i));
+        }
+        
+        this.getContentPane().add(cboCentros, new AbsoluteConstraints(120, 150, 200, 20));
 
-        //Se crean las opciones que tendrá el combo de usuario Administrador de centro
-        ArrayList<String> listaAdministradores = new ArrayList<>();
+        //Se crea la tabla donde se muestra el listado de trabajos
+        tblDatos = new JTable();
+        scroll = new JScrollPane();
+        model = new DefaultTableModel();
+        model.addColumn("Id_Trabajo");
+        model.addColumn("Identificador");
+        model.addColumn("Cantidad Oper.");
+        model.addColumn("Propietario");
 
-        /**
-         * *******************
-         */
-        //MIRAR
-        /**
-         * *******************
-         */
+        tblDatos.setModel(model);
+        scroll.setViewportView(tblDatos);
+        this.getContentPane().add(scroll, new AbsoluteConstraints(20, 190, 460, 260));
+
         //Se crean los botones
         btnAgregar = new JButton("Agregar");
         btnEliminar = new JButton("Eliminar");
@@ -99,23 +124,123 @@ public class VistaTrabajos extends JFrame {
 
         //Si el usuario es Administrador se muestran todos los componentes
         //Si el usuario es AdministradorCentro se restringe su funcionalidad
-        if (userp.getTipoUsuario().equals("Administrador")) {
-            this.getContentPane().add(btnAgregar, new AbsoluteConstraints(360, 60, 100, 20));
-            this.getContentPane().add(btnEliminar, new AbsoluteConstraints(360, 90, 100, 20));
-            btnEliminar.setEnabled(false);
-            this.getContentPane().add(btnModificar, new AbsoluteConstraints(360, 120, 100, 20));
-            btnModificar.setEnabled(false);
-            this.getContentPane().add(btnLimpiar, new AbsoluteConstraints(360, 150, 100, 20));
-        } else {
-            this.getContentPane().add(btnModificar, new AbsoluteConstraints(360, 60, 100, 20));
-            btnModificar.setEnabled(false);
-            this.getContentPane().add(btnLimpiar, new AbsoluteConstraints(360, 90, 100, 20));
-            txtIdentificador.setEnabled(false);
-            cboAdministrador.setVisible(false);
-            lblAdministrador.setVisible(false);
-        }
-        
+//        if (userp.getTipoUsuario().equals("Administrador")) {
+        this.getContentPane().add(btnAgregar, new AbsoluteConstraints(360, 60, 100, 20));
+        this.getContentPane().add(btnEliminar, new AbsoluteConstraints(360, 90, 100, 20));
+        btnEliminar.setEnabled(false);
+        this.getContentPane().add(btnModificar, new AbsoluteConstraints(360, 120, 100, 20));
+        btnModificar.setEnabled(false);
+        this.getContentPane().add(btnLimpiar, new AbsoluteConstraints(360, 150, 100, 20));
+        //Cuadros de texto
+//             this.getContentPane().add(txtPropietario, new AbsoluteConstraints(120, 60, 200, 20));
+//        } else {
+//            this.getContentPane().add(btnModificar, new AbsoluteConstraints(360, 60, 100, 20));
+//            btnModificar.setEnabled(false);
+//            this.getContentPane().add(btnLimpiar, new AbsoluteConstraints(360, 90, 100, 20));
+//            txtIdentificador.setEnabled(false);
+////            cboAdministrador.setVisible(false);
+//            lblPropietario.setVisible(false);
+//        }
+
         //Se agregan los Listeners a los botones y a la tabla
+        //POR HACER
+        refrescarTabla(userp);
+    }
+
+    class MouseClic implements MouseListener {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            int fila = tblDatos.getSelectedRow();
+            trabajoId = (int) tblDatos.getValueAt(fila, 0);
+            txtIdentificador.setText((String) tblDatos.getValueAt(fila, 1));
+            spnCantidad.setValue(Integer.parseInt(tblDatos.getValueAt(fila, 2).toString()));
+            txtPropietario.setText((String) tblDatos.getValueAt(fila,1));
+            
+            btnEliminar.setEnabled(true);
+            btnModificar.setEnabled(true);
+                    
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+        }
+
+    }
+    
+    class BotonAgregarListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(("").equals(txtIdentificador.getText())) {
+                JOptionPane.showMessageDialog(null, "El identificador no puede estar vacío");
+            } else if(txtIdentificador.getText().length()>30) {
+                JOptionPane.showMessageDialog(null, "El identificador no puede tener más de 30 caracteres");
+            } else if(Integer.parseInt(spnCantidad.getValue().toString())<= 0) {
+                JOptionPane.showMessageDialog(null, "La cantidad de operaciones no puede ser menor o igual a cero");
+            } else {
+//                try {
+//                    if(daoTrabajos.crearTrabajo(txtIdentificador.getText(), Integer.parseInt(spnCantidad.getValue().toString()))) {
+//                        
+//                    }
+//                }
+            }
+        }
+    }
+    //Rellenar tabla de Trabajos
+
+    public void refrescarTabla(Usuarios userTrabajo) {
+        while (this.model.getRowCount() > 0) {
+            this.model.removeRow(0);
+        }
+
+        Usuarios us = new Usuarios();
+        us = userTrabajo;
+
+        ResultSet lista = null;
+
+        try {
+            if ("usuario".equals(userTrabajo.getTipoUsuario())) {
+                //lista = daoTrabajos.listarTrabajosUsuario(userTrabajo.getUserId());
+                lista = daoTrabajos.listarTrabajos();
+                Object item[] = new Object[5];
+
+                while (lista.next()) {
+                    item[0] = lista.getInt("idtrabajos");
+                    item[1] = lista.getString("identificador");
+                    item[2] = lista.getInt("cantidadoperaciones");
+                    item[3] = lista.getString("propietario");
+                    this.model.addRow(item);
+
+                }
+                this.tblDatos.setModel(this.model);
+            }
+
+        } catch (SQLException ex) {
+
+        }
+
+    }
+
+    public void limpiarCampos() {
+        txtIdentificador.setText("");
+        spnCantidad.setValue("");
+        txtPropietario.setText("");
+
+        btnEliminar.setEnabled(false);
+        btnModificar.setEnabled(false);
+
     }
 
 }
