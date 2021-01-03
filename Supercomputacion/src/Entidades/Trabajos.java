@@ -7,6 +7,7 @@ package Entidades;
  */
 public class Trabajos {
     
+    private int iIdTrabajo;
     private String sIdentificadorTrab;
     private String sCantidadOperaciones;
     private String sPropietario;
@@ -19,12 +20,20 @@ public class Trabajos {
     public Trabajos() {
         
     }
-    public Trabajos(String sIdentificadorTrab, String sCantidadOperaciones, String sPropietario){
-               this.sIdentificadorTrab = sIdentificadorTrab;
-               this.sCantidadOperaciones = sCantidadOperaciones;
-               this.sPropietario = sPropietario;
+    public Trabajos(int iIdTrabajo, String sIdentificadorTrab, String sCantidadOperaciones, String sPropietario){
+        this.iIdTrabajo = iIdTrabajo;       
+        this.sIdentificadorTrab = sIdentificadorTrab;
+        this.sCantidadOperaciones = sCantidadOperaciones;
+        this.sPropietario = sPropietario;
     }
 
+    public int getiIdTrabajo() {
+        return iIdTrabajo;
+    }
+
+    public void setiIdTrabajo(int iIdTrabajo) {
+        this.iIdTrabajo = iIdTrabajo;
+    }
     /**
      * @return the sIdentificadorTrab
      */

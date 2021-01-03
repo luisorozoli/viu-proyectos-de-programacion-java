@@ -189,4 +189,29 @@ public class UsuariosBBDD {
             return false;
         }
     }
+    
+        public ArrayList<String> listarPropietariosTrabajos() throws SQLException {
+        
+        ArrayList<String> lista = new ArrayList<>();
+        String sSQL = "SELECT * from usuarios";
+        
+        try {
+            Connection con = conexion.ConexionBBDD();
+            st = con.createStatement();
+            rs = st.executeQuery(sSQL);
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            st.close();
+        }
+        
+        try {
+            while (rs.next()) {
+                lista.add(rs.getString(2));
+            }
+        }catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        return lista;
+    }
 }

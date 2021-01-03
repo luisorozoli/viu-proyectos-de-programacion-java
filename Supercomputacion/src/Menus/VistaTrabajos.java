@@ -27,16 +27,15 @@ import org.netbeans.lib.awtextra.AbsoluteLayout;
 public class VistaTrabajos extends JFrame {
 
     //Declaración de botones y otros componentes
-    JLabel lblBienvenida, lblId, lblCantidad, lblPropietario;
+    JLabel lblBienvenida, lblId, lblCantidad, lblPropietario, lblCentros;
     JTextField txtIdentificador, txtPropietario;
     JSpinner spnCantidad;
-//    JComboBox cboAdministrador;
     JScrollPane scroll;
     DefaultTableModel model;
     JTable tblDatos;
     JButton btnAgregar, btnEliminar, btnModificar, btnLimpiar;
     int trabajoId;
-    JComboBox cboCentros;
+    JComboBox cboCentros, cboListaPropietarios;
 
     Usuarios userp = new Usuarios();
     Trabajos trabajo = new Trabajos();
@@ -82,18 +81,38 @@ public class VistaTrabajos extends JFrame {
         lblPropietario = new JLabel("Usuario Prop.:");
         lblPropietario.setHorizontalAlignment(RIGHT);
         this.getContentPane().add(lblPropietario, new AbsoluteConstraints(10, 120, 100, 20));
-
+        
+        //Centros
+        lblCentros = new JLabel("Centros");
+        lblCentros.setHorizontalAlignment(RIGHT);
+        this.getContentPane().add(lblCentros, new AbsoluteConstraints(10,150,100,20));
+        
         //CUADROS DE TEXTO
         txtIdentificador = new JTextField();
         this.getContentPane().add(txtIdentificador, new AbsoluteConstraints(120, 60, 200, 20));
         spnCantidad = new JSpinner();
         this.getContentPane().add(spnCantidad, new AbsoluteConstraints(120, 90, 200, 20));
-        txtPropietario = new JTextField();
-        this.getContentPane().add(txtPropietario, new AbsoluteConstraints(120, 120, 200, 20));
+//        txtPropietario = new JTextField();
+//        this.getContentPane().add(txtPropietario, new AbsoluteConstraints(120, 120, 200, 20));
+        
+       
+
+        //Listar propietarios
+        
+        ArrayList<String> listaPropietariosTrabajos = new ArrayList<>();
+        listaPropietariosTrabajos = (ArrayList<String>)daoUsuarios.listarPropietariosTrabajos();
+        
+        cboListaPropietarios = new JComboBox();
+        
+        for (int i = 0; i<listaPropietariosTrabajos.size();i++) {
+           cboListaPropietarios.addItem(listaPropietariosTrabajos.get(i));
+        }
         
         //Se crea el combo de los centros a los que pertenecen los trabajos
         ArrayList<String> listaCentrosTrabajos = new ArrayList<>();
         listaCentrosTrabajos = (ArrayList<String>)daoCentros.listarCentrosTrabajos();
+        
+        this.getContentPane().add(cboListaPropietarios, new AbsoluteConstraints(120, 120, 200, 20));
         
         cboCentros = new JComboBox();
         
@@ -111,6 +130,7 @@ public class VistaTrabajos extends JFrame {
         model.addColumn("Identificador");
         model.addColumn("Cantidad Oper.");
         model.addColumn("Propietario");
+        model.addColumn("Centro");
 
         tblDatos.setModel(model);
         scroll.setViewportView(tblDatos);
@@ -131,6 +151,7 @@ public class VistaTrabajos extends JFrame {
         this.getContentPane().add(btnModificar, new AbsoluteConstraints(360, 120, 100, 20));
         btnModificar.setEnabled(false);
         this.getContentPane().add(btnLimpiar, new AbsoluteConstraints(360, 150, 100, 20));
+       
         //Cuadros de texto
 //             this.getContentPane().add(txtPropietario, new AbsoluteConstraints(120, 60, 200, 20));
 //        } else {
@@ -144,6 +165,14 @@ public class VistaTrabajos extends JFrame {
 
         //Se agregan los Listeners a los botones y a la tabla
         //POR HACER
+        
+        tblDatos.addMouseListener((MouseListener) new MouseClic());
+        btnAgregar.addActionListener((ActionListener) new BotonAgregarListener());
+//        btnEliminar.addActionListener((ActionListener) new BotonEliminarListener());
+        btnModificar.addActionListener((ActionListener) new BotonModificarListener());
+//        btnLimpiar.addActionListener((ActionListener) new BotonLimpiarListener());
+        
+        
         refrescarTabla(userp);
     }
 
@@ -190,14 +219,60 @@ public class VistaTrabajos extends JFrame {
             } else if(Integer.parseInt(spnCantidad.getValue().toString())<= 0) {
                 JOptionPane.showMessageDialog(null, "La cantidad de operaciones no puede ser menor o igual a cero");
             } else {
-//                try {
-//                    if(daoTrabajos.crearTrabajo(txtIdentificador.getText(), Integer.parseInt(spnCantidad.getValue().toString()))) {
-//                        
-//                    }
-//                }
+                try {
+                    if(daoTrabajos.crearTrabajo(txtIdentificador.getText(), Integer.parseInt(spnCantidad.getValue().toString()), cboListaPropietarios.getSelectedItem().toString(), cboCentros.getSelectedItem().toString())){
+                        
+                        limpiarCampos();
+                        refrescarTabla(userp);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se ha podido dar de alta el trabajo");
+                    }
+                }catch (SQLException ex) {
+                            
+                            }
             }
         }
     }
+    
+    
+    class BotonEliminar implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int x = JOptionPane.showConfirmDialog(null,"ESTÁ SEGURO DE ELIMINAR ESTE TRABAJO");
+            if(x==0) {
+                try {
+                    if(daoTrabajos.eliminarTrabajo(trabajoId)){
+                        limpiarCampos();
+                        refrescarTabla(userp);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se pudo eliminar el centro");
+                    }
+                } catch(SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+    
+    class BotonModificarListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(txtIdentificador.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "El identificador no puede estar vacío");
+            } else if (txtIdentificador.getText().length()>30) {
+                JOptionPane.showMessageDialog(null, "El identificador debe tener menos de 30 caracteres");
+            } else if (Integer.parseInt(spnCantidad.getValue().toString())<=0) {
+                JOptionPane.showMessageDialog(null, "La cantidad no puede ser menos o igual a cero");
+            } else {
+                trabajo.setiIdTrabajo(trabajoId);
+                trabajo.setsIdentificadorTrab(txtIdentificador.getText());
+                trabajo.setsCantidadOperaciones((spnCantidad.getValue().toString()));
+                
+            }
+        }
+        
+    }
+    
     //Rellenar tabla de Trabajos
 
     public void refrescarTabla(Usuarios userTrabajo) {
@@ -211,9 +286,11 @@ public class VistaTrabajos extends JFrame {
         ResultSet lista = null;
 
         try {
-            if ("usuario".equals(userTrabajo.getTipoUsuario())) {
-                //lista = daoTrabajos.listarTrabajosUsuario(userTrabajo.getUserId());
-                lista = daoTrabajos.listarTrabajos();
+//            if ("usuario".equals(userTrabajo.getTipoUsuario())) {
+                lista = daoTrabajos.listarTrabajosUsuario(userTrabajo.getUserId());
+                System.out.println("userTrabajo.getUserId:"+userTrabajo.getUserId());
+                System.out.println("lista: "+lista.getInt(1));
+//                lista = daoTrabajos.listarTrabajos();
                 Object item[] = new Object[5];
 
                 while (lista.next()) {
@@ -221,11 +298,12 @@ public class VistaTrabajos extends JFrame {
                     item[1] = lista.getString("identificador");
                     item[2] = lista.getInt("cantidadoperaciones");
                     item[3] = lista.getString("propietario");
+                    item[4] = lista.getShort("centroTrabajo");
                     this.model.addRow(item);
 
                 }
                 this.tblDatos.setModel(this.model);
-            }
+//            }
 
         } catch (SQLException ex) {
 
@@ -236,8 +314,6 @@ public class VistaTrabajos extends JFrame {
     public void limpiarCampos() {
         txtIdentificador.setText("");
         spnCantidad.setValue("");
-        txtPropietario.setText("");
-
         btnEliminar.setEnabled(false);
         btnModificar.setEnabled(false);
 

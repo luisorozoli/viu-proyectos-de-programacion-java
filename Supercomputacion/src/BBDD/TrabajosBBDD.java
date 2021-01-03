@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  *
@@ -43,20 +44,26 @@ public class TrabajosBBDD {
     }
 
     //Crear trabajo
-    public int crearTrabajo(Trabajos trabajo) throws SQLException {
+    public boolean crearTrabajo(String sIdentificadorTrabajo, int iCantidad,  String sPropietario, String sIdentCentro) throws SQLException {
+        
+        try {
+        
+            String sSQL = "INSERT INTO supercomputacion.trabajos(identificador, cantidadoperaciones, propietario, centroTrabajo)VALUES(?,?,?,?)";
+            Connection con = conexion.ConexionBBDD();
+            pst = con.prepareStatement(sSQL);
+            //Asignar parámetros
+            pst.setString(1, sIdentificadorTrabajo);
+            pst.setInt(2, iCantidad);
+            pst.setString(3, sPropietario);
+            pst.setString(4, sIdentCentro);
 
-        String sSQL = "INSERT INTO supercomputacion.trabajos(identificador,cantidadoperaciones,propietario)VALUES(?,?,?)";
-        Connection con = conexion.ConexionBBDD();
-        pst = con.prepareStatement(sSQL);
-        //Asignar parámetros
-        pst.setString(1, trabajo.getsIdentificadorTrab());
-        pst.setString(2, trabajo.getsCantidadOperaciones());
-        pst.setString(3, trabajo.getsPropietario());
-
-        int iFilasInsertadas = pst.executeUpdate();
-
-        return iFilasInsertadas;
-
+            int iFilasInsertadas = pst.executeUpdate();
+        
+            return true;
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     //Modificar trabajo
@@ -77,32 +84,39 @@ public class TrabajosBBDD {
     }
 
     //Eliminar trabajo
-    public int eliminarTrabajo(String sIdTrabajo) throws SQLException {
-        String sSQL = "DELETE FROM trabajos WHERE idtrabajos = ?";
+    public boolean eliminarTrabajo(int trabajoId) throws SQLException {
+        
+        try {
 
-        Connection con = conexion.ConexionBBDD();
-
-        pst = con.prepareStatement(sSQL);
-        int filasEliminadas = pst.executeUpdate();
-
-        return filasEliminadas;
+            String sSQL = "DELETE FROM trabajos WHERE idtrabajos = ?";
+            Connection con = conexion.ConexionBBDD();
+            pst = con.prepareStatement(sSQL);
+            pst.setInt(1, trabajoId);
+            int filasEliminadas = pst.executeUpdate();
+            return true;
+        
+        } catch (SQLException ex) {
+            return false;
+        }
     }
 
     //Mostrar los trabajos de un usuario
-    public ResultSet listarTrabajosUsuario(int sIdUsuario) throws SQLException {
-        String sSQL = "select * from trabajos where idusuario = ?";
+    public ResultSet listarTrabajosUsuario(int iIdUsuario) throws SQLException {
+        System.out.println(iIdUsuario);
+        String sSQL = "select * from trabajos tra inner join usuarios user on user.identificador = tra.propietario and user.idusuario = ?";
         try {
             Connection con = conexion.ConexionBBDD();
-
-            st = con.createStatement();
-            rs = st.executeQuery(sSQL);
-
+           pst = con.prepareStatement(sSQL);
+           
+           pst.setInt(1, iIdUsuario);
+           rs = pst.executeQuery();
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } finally {
-            st.close();
         }
-
+//        } finally {
+//            pst.close();
+//        }
+        System.out.println("rs: "+rs);
         return rs;
     }
     
