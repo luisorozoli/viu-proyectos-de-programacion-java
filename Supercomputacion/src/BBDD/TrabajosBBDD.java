@@ -67,20 +67,31 @@ public class TrabajosBBDD {
     }
 
     //Modificar trabajo
-    public int modificarTrabajo(String sIdTrabajo, Trabajos trabajo) throws SQLException {
-        String sSQL = "UPDATE trabajos set identificador = ?, cantidadoperaciones = ?, propietario = ? where idTrabajos = ?";
-        Connection con = conexion.ConexionBBDD();
-        pst = con.prepareStatement(sSQL);
+    public boolean modificarTrabajo(Trabajos trabajo) throws SQLException {
+        
+        try {
+            
+            System.out.println("idtrabajo en modificarTrabajo: "+trabajo.getiIdTrabajo());
+            System.out.println("identificador: "+trabajo.getsIdentificadorTrab());
+            
+            
+            String sSQL = "UPDATE trabajos set identificador = ?, cantidadoperaciones = ?, propietario = ?, centroTrabajo = ? where idTrabajos = ?";
+            Connection con = conexion.ConexionBBDD();
+            pst = con.prepareStatement(sSQL);
 
-        //Asignar parámetros
-        pst.setString(1, trabajo.getsIdentificadorTrab());
-        pst.setString(2, trabajo.getsCantidadOperaciones());
-        pst.setString(3, trabajo.getsPropietario());
-        pst.setString(4, sIdTrabajo);
+            //Asignar parámetros
+            pst.setString(1, trabajo.getsIdentificadorTrab());
+            pst.setString(2, trabajo.getsCantidadOperaciones());
+            pst.setString(3, trabajo.getsPropietario());
+            pst.setString(4, trabajo.getsCentroTrabajo());
+            pst.setInt(5, trabajo.getiIdTrabajo());
 
-        int iFilasModificadas = pst.executeUpdate();
-
-        return iFilasModificadas;
+            int iFilasModificadas = pst.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     //Eliminar trabajo
@@ -116,13 +127,12 @@ public class TrabajosBBDD {
 //        } finally {
 //            pst.close();
 //        }
-        System.out.println("rs: "+rs);
         return rs;
     }
     
     public ResultSet listarTrabajosCentro(String sIdUsuario) throws SQLException {
         String sSQL ="select tra.*, cen.*, usu.* from trabajos tra "
-                + "inner join centros cen on cen.idcentro = tra.idcentro\n" +
+                + "inner join centros cen on cen.identificador = tra.centroTrabajo\n" +
         "inner join usuarios usu on usu.identificador = cen.administrador and usu.idusuario = ?";
         
         try {

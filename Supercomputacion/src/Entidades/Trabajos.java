@@ -12,10 +12,11 @@ public class Trabajos {
     private String sCantidadOperaciones;
     private String sPropietario;
     private String sIdTrabajo;
+    private String sCentroTrabajo;
 
-    public String getsIdTrabajo() {
-        return sIdTrabajo;
-    }
+//    public String getsIdTrabajo() {
+//        return sIdTrabajo;
+//    }
     
     public Trabajos() {
         
@@ -74,6 +75,14 @@ public class Trabajos {
      */
     public void setsPropietario(String sPropietario) {
         this.sPropietario = sPropietario;
+    }
+    
+    public String getsCentroTrabajo() {
+        return sCentroTrabajo;
+    }
+
+    public void setsCentroTrabajo(String sCentroTrabajo) {
+        this.sCentroTrabajo = sCentroTrabajo;
     }
         
 }

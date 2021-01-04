@@ -168,9 +168,9 @@ public class VistaTrabajos extends JFrame {
         
         tblDatos.addMouseListener((MouseListener) new MouseClic());
         btnAgregar.addActionListener((ActionListener) new BotonAgregarListener());
-//        btnEliminar.addActionListener((ActionListener) new BotonEliminarListener());
+        btnEliminar.addActionListener((ActionListener) new BotonEliminarListener());
         btnModificar.addActionListener((ActionListener) new BotonModificarListener());
-//        btnLimpiar.addActionListener((ActionListener) new BotonLimpiarListener());
+        btnLimpiar.addActionListener((ActionListener) new BotonLimpiarListener());
         
         
         refrescarTabla(userp);
@@ -184,8 +184,9 @@ public class VistaTrabajos extends JFrame {
             trabajoId = (int) tblDatos.getValueAt(fila, 0);
             txtIdentificador.setText((String) tblDatos.getValueAt(fila, 1));
             spnCantidad.setValue(Integer.parseInt(tblDatos.getValueAt(fila, 2).toString()));
-            txtPropietario.setText((String) tblDatos.getValueAt(fila,1));
-            
+            //txtPropietario.setText((String) tblDatos.getValueAt(fila,1));
+            cboListaPropietarios.setSelectedItem((String)tblDatos.getValueAt(fila, 3));
+            cboCentros.setSelectedItem((String)tblDatos.getValueAt(fila, 4));
             btnEliminar.setEnabled(true);
             btnModificar.setEnabled(true);
                     
@@ -264,13 +265,56 @@ public class VistaTrabajos extends JFrame {
             } else if (Integer.parseInt(spnCantidad.getValue().toString())<=0) {
                 JOptionPane.showMessageDialog(null, "La cantidad no puede ser menos o igual a cero");
             } else {
+                System.out.println("TrabajoId: "+trabajoId);
                 trabajo.setiIdTrabajo(trabajoId);
                 trabajo.setsIdentificadorTrab(txtIdentificador.getText());
                 trabajo.setsCantidadOperaciones((spnCantidad.getValue().toString()));
+                trabajo.setsPropietario(cboListaPropietarios.getSelectedItem().toString());
+                trabajo.setsCentroTrabajo(cboCentros.getSelectedItem().toString());
+                
+                int x = JOptionPane.showConfirmDialog(null, "¿ESTÁ SEGURO DE MODIFICAR ESTE TRABAJO?");
+                if(x==0) {
+                    try {
+                        if(daoTrabajos.modificarTrabajo(trabajo)) {
+                            limpiarCampos();
+                            refrescarTabla(userp);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No se ha podido modificar el trabajo");
+                        }
+                    } catch(SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
                 
             }
         }
         
+    }
+    
+    class BotonEliminarListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int x = JOptionPane.showConfirmDialog(null, "¿ESTÁ SEGURO DE ELIMINAR EL TRABAJO");
+            if(x==0) {
+                try {
+                    if(daoTrabajos.eliminarTrabajo(trabajoId)) {
+                        limpiarCampos();
+                        refrescarTabla(userp);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No es posible eliminar el trabajo");
+                    }
+                } catch(SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+    
+    class BotonLimpiarListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            limpiarCampos();
+        }
     }
     
     //Rellenar tabla de Trabajos
@@ -288,8 +332,7 @@ public class VistaTrabajos extends JFrame {
         try {
 //            if ("usuario".equals(userTrabajo.getTipoUsuario())) {
                 lista = daoTrabajos.listarTrabajosUsuario(userTrabajo.getUserId());
-                System.out.println("userTrabajo.getUserId:"+userTrabajo.getUserId());
-                System.out.println("lista: "+lista.getInt(1));
+
 //                lista = daoTrabajos.listarTrabajos();
                 Object item[] = new Object[5];
 
@@ -298,7 +341,7 @@ public class VistaTrabajos extends JFrame {
                     item[1] = lista.getString("identificador");
                     item[2] = lista.getInt("cantidadoperaciones");
                     item[3] = lista.getString("propietario");
-                    item[4] = lista.getShort("centroTrabajo");
+                    item[4] = lista.getString("centroTrabajo");
                     this.model.addRow(item);
 
                 }
@@ -306,14 +349,16 @@ public class VistaTrabajos extends JFrame {
 //            }
 
         } catch (SQLException ex) {
-
+            ex.printStackTrace();
         }
 
     }
 
     public void limpiarCampos() {
         txtIdentificador.setText("");
-        spnCantidad.setValue("");
+        spnCantidad.setValue(0);
+        cboListaPropietarios.setSelectedIndex(0);
+        cboCentros.setSelectedIndex(0);
         btnEliminar.setEnabled(false);
         btnModificar.setEnabled(false);
 
