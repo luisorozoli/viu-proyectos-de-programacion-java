@@ -100,7 +100,7 @@ public class VistaTrabajos extends JFrame {
         //Listar propietarios
         
         ArrayList<String> listaPropietariosTrabajos = new ArrayList<>();
-        listaPropietariosTrabajos = (ArrayList<String>)daoUsuarios.listarPropietariosTrabajos();
+        listaPropietariosTrabajos = (ArrayList<String>)daoUsuarios.listarPropietariosTrabajos(userp);
         
         cboListaPropietarios = new JComboBox();
         
@@ -142,29 +142,28 @@ public class VistaTrabajos extends JFrame {
         btnModificar = new JButton("Modificar");
         btnLimpiar = new JButton("Limpiar");
 
-        //Si el usuario es Administrador se muestran todos los componentes
-        //Si el usuario es AdministradorCentro se restringe su funcionalidad
-//        if (userp.getTipoUsuario().equals("Administrador")) {
+        
+    if (("administradorcentro").equals(userp.getTipoUsuario().toLowerCase())) {
         this.getContentPane().add(btnAgregar, new AbsoluteConstraints(360, 60, 100, 20));
+        btnAgregar.setEnabled(false);
         this.getContentPane().add(btnEliminar, new AbsoluteConstraints(360, 90, 100, 20));
         btnEliminar.setEnabled(false);
         this.getContentPane().add(btnModificar, new AbsoluteConstraints(360, 120, 100, 20));
         btnModificar.setEnabled(false);
         this.getContentPane().add(btnLimpiar, new AbsoluteConstraints(360, 150, 100, 20));
-       
-        //Cuadros de texto
-//             this.getContentPane().add(txtPropietario, new AbsoluteConstraints(120, 60, 200, 20));
-//        } else {
-//            this.getContentPane().add(btnModificar, new AbsoluteConstraints(360, 60, 100, 20));
-//            btnModificar.setEnabled(false);
-//            this.getContentPane().add(btnLimpiar, new AbsoluteConstraints(360, 90, 100, 20));
-//            txtIdentificador.setEnabled(false);
-////            cboAdministrador.setVisible(false);
-//            lblPropietario.setVisible(false);
-//        }
+    } else {
+        this.getContentPane().add(btnAgregar, new AbsoluteConstraints(360, 60, 100, 20));
+        btnAgregar.setEnabled(true);
+        this.getContentPane().add(btnEliminar, new AbsoluteConstraints(360, 90, 100, 20));
+        btnEliminar.setEnabled(false);
+        this.getContentPane().add(btnModificar, new AbsoluteConstraints(360, 120, 100, 20));
+        btnModificar.setEnabled(false);
+        this.getContentPane().add(btnLimpiar, new AbsoluteConstraints(360, 150, 100, 20));
+    }
+
 
         //Se agregan los Listeners a los botones y a la tabla
-        //POR HACER
+        
         
         tblDatos.addMouseListener((MouseListener) new MouseClic());
         btnAgregar.addActionListener((ActionListener) new BotonAgregarListener());
@@ -184,11 +183,15 @@ public class VistaTrabajos extends JFrame {
             trabajoId = (int) tblDatos.getValueAt(fila, 0);
             txtIdentificador.setText((String) tblDatos.getValueAt(fila, 1));
             spnCantidad.setValue(Integer.parseInt(tblDatos.getValueAt(fila, 2).toString()));
-            //txtPropietario.setText((String) tblDatos.getValueAt(fila,1));
             cboListaPropietarios.setSelectedItem((String)tblDatos.getValueAt(fila, 3));
             cboCentros.setSelectedItem((String)tblDatos.getValueAt(fila, 4));
             btnEliminar.setEnabled(true);
-            btnModificar.setEnabled(true);
+            
+           if(("administradorcentro").equals(userp.getTipoUsuario().toLowerCase())){
+               btnModificar.setEnabled(false);
+           } else {
+               btnModificar.setEnabled(true);
+           }
                     
         }
 
@@ -330,10 +333,15 @@ public class VistaTrabajos extends JFrame {
         ResultSet lista = null;
 
         try {
-//            if ("usuario".equals(userTrabajo.getTipoUsuario())) {
-                lista = daoTrabajos.listarTrabajosUsuario(userTrabajo.getUserId());
+            if ("administrador".equals(userTrabajo.getTipoUsuario().toLowerCase())) {
+//                lista = daoTrabajos.listarTrabajosUsuario(us);
 
-//                lista = daoTrabajos.listarTrabajos();
+                lista = daoTrabajos.listarTrabajos();
+            } else if ("usuario".equals(userTrabajo.getTipoUsuario().toLowerCase())){
+                lista = daoTrabajos.listarTrabajosUsuario(us);
+            } else {
+                lista = daoTrabajos.listarTrabajosCentro(us);
+            }
                 Object item[] = new Object[5];
 
                 while (lista.next()) {

@@ -190,12 +190,13 @@ public class UsuariosBBDD {
         }
     }
     
-        public ArrayList<String> listarPropietariosTrabajos() throws SQLException {
+        public ArrayList<String> listarPropietariosTrabajos(Usuarios u) throws SQLException {
         
         ArrayList<String> lista = new ArrayList<>();
-        String sSQL = "SELECT * from usuarios";
-        
-        try {
+        String sSQL = "";
+        if ("administrador".equals(u.getTipoUsuario().toLowerCase())) {
+            sSQL = "SELECT * from usuarios where tipousuario != 'AdministradorCentro' and tipousuario!='Administrador'";
+            try {
             Connection con = conexion.ConexionBBDD();
             st = con.createStatement();
             rs = st.executeQuery(sSQL);
@@ -203,6 +204,20 @@ public class UsuariosBBDD {
             ex.printStackTrace();
         } finally {
             st.close();
+        }
+        } else {
+            sSQL = "SELECT * from usuarios where idusuario = ?";
+            try {
+                Connection con = conexion.ConexionBBDD();
+                pst = con.prepareStatement(sSQL);
+                pst.setInt(1, u.getUserId());
+                rs = pst.executeQuery();
+            } catch(SQLException ex) {
+                ex.printStackTrace();
+            } finally {
+                pst.close();
+            }
+            
         }
         
         try {

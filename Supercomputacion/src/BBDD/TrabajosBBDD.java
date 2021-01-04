@@ -6,6 +6,7 @@
 package BBDD;
 
 import Entidades.Trabajos;
+import Entidades.Usuarios;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -112,8 +113,14 @@ public class TrabajosBBDD {
     }
 
     //Mostrar los trabajos de un usuario
-    public ResultSet listarTrabajosUsuario(int iIdUsuario) throws SQLException {
-        System.out.println(iIdUsuario);
+    public ResultSet listarTrabajosUsuario(Usuarios us) throws SQLException {
+        
+        int iIdUsuario = us.getUserId();
+        String sTipoUsuario = us.getTipoUsuario();
+        System.out.println("iIdUsuario: "+ iIdUsuario);
+        System.out.println("sTipoUsuario: "+ sTipoUsuario);
+        
+        
         String sSQL = "select * from trabajos tra inner join usuarios user on user.identificador = tra.propietario and user.idusuario = ?";
         try {
             Connection con = conexion.ConexionBBDD();
@@ -130,21 +137,20 @@ public class TrabajosBBDD {
         return rs;
     }
     
-    public ResultSet listarTrabajosCentro(String sIdUsuario) throws SQLException {
-        String sSQL ="select tra.*, cen.*, usu.* from trabajos tra "
-                + "inner join centros cen on cen.identificador = tra.centroTrabajo\n" +
-        "inner join usuarios usu on usu.identificador = cen.administrador and usu.idusuario = ?";
+    public ResultSet listarTrabajosCentro(Usuarios us) throws SQLException {
         
         try {
+            String sSQL = "select tra.* from trabajos tra  inner join centros cen on cen.identificador = tra.centrotrabajo inner join usuarios usu on usu.identificador = cen.administrador and usu.idusuario = ?";
             Connection con = conexion.ConexionBBDD();
-
-            st = con.createStatement();
-            rs = st.executeQuery(sSQL);
+            pst = con.prepareStatement(sSQL);
+            pst.setInt(1, us.getUserId());
+            rs = pst.executeQuery();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
+            System.out.println(ex.getErrorCode());
         } finally {
-            st.close();
+            pst.close();
         }
 
         return rs;
