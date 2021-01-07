@@ -12,11 +12,11 @@ public class ConexionBBDD {
 
     public String driver = "org.mariadb.jdbc.Driver";
     public String basedatos = "supercomputacion";
-    public String host = "bbdd-21giin.city7zvgthab.us-east-1.rds.amazonaws.com";
+    public String host = "proyprog20-21giin.cydvwi2rvkii.us-east-1.rds.amazonaws.com";
     public String puerto = "3306";
     public String url = "jdbc:mysql://" + host + ":" + puerto + "/" + basedatos;
     public String usuario = "admin";
-    public String password = "0Xzrc7&q77NT";
+    public String password = "kTAIZ3oAv8u9";
     Connection con = null;
     
     
