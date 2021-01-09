@@ -15,7 +15,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- *
+ * Clase utilizada para el acceso a los datos de la tabla <strong>trabajos</strong>
+ * de la base de datos.
  * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
  */
 public class TrabajosBBDD {
@@ -25,7 +26,12 @@ public class TrabajosBBDD {
     private PreparedStatement pst = null;
     private ConexionBBDD conexion = new ConexionBBDD();
 
-    //Listar trabajos (Administrador)
+    /**
+     * Método que realiza una consulta de todos los registros de la tabla de <strong>
+     * trabajos</strong>.
+     * @return rs ResultSet con todos los registros de la tabla <strong>trabajos</strong>.
+     * @throws SQLException 
+     */
     public ResultSet listarTrabajos() throws SQLException {
 
         String sSQL = "SELECT * FROM trabajos";
@@ -44,7 +50,15 @@ public class TrabajosBBDD {
         return rs;
     }
 
-    //Crear trabajo
+    /**
+     * Método que inserta un nuevo registro en la tabla de <strong>trabajos</strong>
+     * @param sIdentificadorTrabajo String con el <strong>identificador</strong> del trabajo
+     * @param iCantidad int con la <strong>cantidad</strong> de operaciones del trabajo
+     * @param sPropietario String con el <strong>propietario</strong> del trabajo
+     * @param sIdentCentro String con el <strong>centro</strong> del trabajo
+     * @return true o false dependiendo de si se pudo insertar el registro o no.
+     * @throws SQLException 
+     */
     public boolean crearTrabajo(String sIdentificadorTrabajo, int iCantidad,  String sPropietario, String sIdentCentro) throws SQLException {
         
         try {
@@ -67,7 +81,12 @@ public class TrabajosBBDD {
         }
     }
 
-    //Modificar trabajo
+    /**
+     * Método que realiza el <i>update</i> de un registro de la tabla <strong>trabajos</strong>
+     * @param trabajo Trabajo que será modificado
+     * @return true o false dependiendo de si se p udo o no realizar el <i>update</i>.
+     * @throws SQLException 
+     */
     public boolean modificarTrabajo(Trabajos trabajo) throws SQLException {
         
         try {
@@ -95,7 +114,12 @@ public class TrabajosBBDD {
         }
     }
 
-    //Eliminar trabajo
+    /**
+     * Método que elimina un registro de la tabla de <strong>trabajos</strong>.
+     * @param trabajoId del trabajo que debe ser eliminado.
+     * @return true o false dependiendo de si se pudo o no eliminar el usuario.
+     * @throws SQLException 
+     */
     public boolean eliminarTrabajo(int trabajoId) throws SQLException {
         
         try {
@@ -112,7 +136,12 @@ public class TrabajosBBDD {
         }
     }
 
-    //Mostrar los trabajos de un usuario
+    /**
+     * Método que muestra los trabajos de un usuario propietario
+     * @param us Usuario propietario de los trabajos a mostrar
+     * @return rs ResultSet de la lista de trabajos de un usuario de los cuales es propietario
+     * @throws SQLException 
+     */
     public ResultSet listarTrabajosUsuario(Usuarios us) throws SQLException {
         
         int iIdUsuario = us.getUserId();
@@ -131,12 +160,15 @@ public class TrabajosBBDD {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-//        } finally {
-//            pst.close();
-//        }
         return rs;
     }
     
+    /**
+     * Método que muestra los trabajos de un centro.
+     * @param us Usuario AdministradorCentro 
+     * @return rs ResultSet con todos los trabajos del centro al que pertenece el AdministradorCentro
+     * @throws SQLException 
+     */
     public ResultSet listarTrabajosCentro(Usuarios us) throws SQLException {
         
         try {

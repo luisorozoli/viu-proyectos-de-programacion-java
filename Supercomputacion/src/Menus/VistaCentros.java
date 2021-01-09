@@ -205,7 +205,7 @@ public class VistaCentros extends JFrame {
     /**
      * Clase que implementa el <strong>ActionListener</strong> del botón
      * <strong>Agregar</strong> de la ventana <strong>Gestión de Centros</strong>.<br>
-     * Al hacee clic en el botón <strong>Agregar</strong>, luego de
+     * Al hacer clic en el botón <strong>Agregar</strong>, luego de
      * validar la información contenida en los componentes, se procede a crear el
      * centro en la tabla de <strong>Centros</strong> de la base de datos.<br>
      * Si se pudo crear el centro, se limpian todos los componentes de la ventana y se

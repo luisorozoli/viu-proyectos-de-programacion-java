@@ -79,7 +79,11 @@ public class MenuLogin extends JFrame {
 
     }
 
-    //Eventos Botones
+    /**
+     * Clase que implementa el <strong>ActionListener</strong> del botón
+     * <strong>Cancelar</strong> de la ventana de <strong>Login</strong>.<br>
+     * Al hacer clic en el botón <strong>Cancelar</strong> se cerrará la ventana de login.
+     */
     class CancelarBotonListener implements ActionListener {
 
         @Override
@@ -88,7 +92,14 @@ public class MenuLogin extends JFrame {
             frame.dispose();
         }
     }
-
+    
+    /**
+     * Clase que implementa el <strong>ActionListener</strong> del botón
+     * <strong>Aceptar</strong> de la ventana de <strong>Login</strong>.<br>
+     * Al hacer clic en el botón <strong>Aceptar</strong> se comprobará el usuario y 
+     * contraseña del usuario. Si usuario/clave son válidos nos mostrará la pantalla de la aplicación
+     * sino aparecerá un mensaje de error indicándonos que el usuario/clave no son correctos.
+     */
     class AceptarBotonListener implements ActionListener {
 
         @Override
