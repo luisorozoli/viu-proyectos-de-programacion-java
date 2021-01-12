@@ -12,6 +12,8 @@ import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import static javax.swing.SwingConstants.RIGHT;
 import javax.swing.table.DefaultTableModel;
@@ -33,7 +35,7 @@ public class VistaTrabajos extends JFrame {
     JScrollPane scroll;
     DefaultTableModel model;
     JTable tblDatos;
-    JButton btnAgregar, btnEliminar, btnModificar, btnLimpiar;
+    JButton btnAgregar, btnEliminar, btnModificar, btnLimpiar, btnAsignar;
     int trabajoId;
     JComboBox cboCentros, cboListaPropietarios;
 
@@ -43,6 +45,7 @@ public class VistaTrabajos extends JFrame {
     UsuariosBBDD daoUsuarios = new UsuariosBBDD();
     TrabajosBBDD daoTrabajos = new TrabajosBBDD();
     CentrosBBDD daoCentros = new CentrosBBDD();
+    ProcesamientosBBDD daoProcesamiento = new ProcesamientosBBDD();
 
     /**
      * Método constructor de la clase <strong>VistaTrabajos</strong>
@@ -90,9 +93,9 @@ public class VistaTrabajos extends JFrame {
         this.getContentPane().add(lblPropietario, new AbsoluteConstraints(10, 120, 100, 20));
 
         //Centros
-        lblCentros = new JLabel("Centros");
-        lblCentros.setHorizontalAlignment(RIGHT);
-        this.getContentPane().add(lblCentros, new AbsoluteConstraints(10, 150, 100, 20));
+        //lblCentros = new JLabel("Centros");
+        //lblCentros.setHorizontalAlignment(RIGHT);
+        //this.getContentPane().add(lblCentros, new AbsoluteConstraints(10, 150, 100, 20));
 
         //CUADROS DE TEXTO
         txtIdentificador = new JTextField();
@@ -115,7 +118,8 @@ public class VistaTrabajos extends JFrame {
         listaCentrosTrabajos = (ArrayList<String>) daoCentros.listarCentrosTrabajos();
 
         this.getContentPane().add(cboListaPropietarios, new AbsoluteConstraints(120, 120, 200, 20));
-
+/*
+        
         cboCentros = new JComboBox();
 
         for (int i = 0; i < listaCentrosTrabajos.size(); i++) {
@@ -123,7 +127,7 @@ public class VistaTrabajos extends JFrame {
         }
 
         this.getContentPane().add(cboCentros, new AbsoluteConstraints(120, 150, 200, 20));
-
+*/
         //Se crea la tabla donde se muestra el listado de trabajos
         tblDatos = new JTable();
         scroll = new JScrollPane();
@@ -136,13 +140,14 @@ public class VistaTrabajos extends JFrame {
 
         tblDatos.setModel(model);
         scroll.setViewportView(tblDatos);
-        this.getContentPane().add(scroll, new AbsoluteConstraints(20, 190, 460, 260));
+        this.getContentPane().add(scroll, new AbsoluteConstraints(20, 220, 460, 260));
 
         //Se crean los botones
         btnAgregar = new JButton("Agregar");
         btnEliminar = new JButton("Eliminar");
         btnModificar = new JButton("Modificar");
         btnLimpiar = new JButton("Limpiar");
+        btnAsignar = new JButton("Asignar trabajos");
 
         if (("administradorcentro").equals(userp.getTipoUsuario().toLowerCase())) {
             this.getContentPane().add(btnAgregar, new AbsoluteConstraints(360, 60, 100, 20));
@@ -151,7 +156,8 @@ public class VistaTrabajos extends JFrame {
             btnEliminar.setEnabled(false);
             this.getContentPane().add(btnModificar, new AbsoluteConstraints(360, 120, 100, 20));
             btnModificar.setEnabled(false);
-            this.getContentPane().add(btnLimpiar, new AbsoluteConstraints(360, 150, 100, 20));
+            this.getContentPane().add(btnLimpiar, new AbsoluteConstraints(360, 150, 100, 20));          
+            
         } else {
             this.getContentPane().add(btnAgregar, new AbsoluteConstraints(360, 60, 100, 20));
             btnAgregar.setEnabled(true);
@@ -160,6 +166,13 @@ public class VistaTrabajos extends JFrame {
             this.getContentPane().add(btnModificar, new AbsoluteConstraints(360, 120, 100, 20));
             btnModificar.setEnabled(false);
             this.getContentPane().add(btnLimpiar, new AbsoluteConstraints(360, 150, 100, 20));
+            
+            if(("administrador").equals(userp.getTipoUsuario().toLowerCase())){
+                btnAsignar.setEnabled(true);
+                this.getContentPane().add(btnAsignar, new AbsoluteConstraints(360, 180, 100, 20)); 
+            }
+            
+            
         }
 
         //Se agregan los Listeners a los botones y a la tabla
@@ -168,6 +181,7 @@ public class VistaTrabajos extends JFrame {
         btnEliminar.addActionListener((ActionListener) new BotonEliminarListener());
         btnModificar.addActionListener((ActionListener) new BotonModificarListener());
         btnLimpiar.addActionListener((ActionListener) new BotonLimpiarListener());
+        btnAsignar.addActionListener((ActionListener) new BotonAsignarListener());
 
         refrescarTabla(userp);
     }
@@ -189,7 +203,7 @@ public class VistaTrabajos extends JFrame {
             txtIdentificador.setText((String) tblDatos.getValueAt(fila, 1));
             spnCantidad.setValue(Integer.parseInt(tblDatos.getValueAt(fila, 2).toString()));
             cboListaPropietarios.setSelectedItem((String) tblDatos.getValueAt(fila, 3));
-            cboCentros.setSelectedItem((String) tblDatos.getValueAt(fila, 4));
+            //cboCentros.setSelectedItem((String) tblDatos.getValueAt(fila, 4));
             btnEliminar.setEnabled(true);
 
             if (("administradorcentro").equals(userp.getTipoUsuario().toLowerCase())) {
@@ -242,7 +256,7 @@ public class VistaTrabajos extends JFrame {
                 JOptionPane.showMessageDialog(null, "La cantidad de operaciones no puede ser menor o igual a cero");
             } else {
                 try {
-                    if (daoTrabajos.crearTrabajo(txtIdentificador.getText(), Integer.parseInt(spnCantidad.getValue().toString()), cboListaPropietarios.getSelectedItem().toString(), cboCentros.getSelectedItem().toString())) {
+                    if (daoTrabajos.crearTrabajo(txtIdentificador.getText(), Integer.parseInt(spnCantidad.getValue().toString()), cboListaPropietarios.getSelectedItem().toString())) {
 
                         limpiarCampos();
                         refrescarTabla(userp);
@@ -283,7 +297,7 @@ public class VistaTrabajos extends JFrame {
                 trabajo.setsIdentificadorTrab(txtIdentificador.getText());
                 trabajo.setsCantidadOperaciones((spnCantidad.getValue().toString()));
                 trabajo.setsPropietario(cboListaPropietarios.getSelectedItem().toString());
-                trabajo.setsCentroTrabajo(cboCentros.getSelectedItem().toString());
+                //trabajo.setsCentroTrabajo(cboCentros.getSelectedItem().toString());
 
                 int x = JOptionPane.showConfirmDialog(null, "¿ESTÁ SEGURO DE MODIFICAR ESTE TRABAJO?");
                 if (x == 0) {
@@ -396,6 +410,76 @@ public class VistaTrabajos extends JFrame {
         }
 
     }
+    
+    
+    class BotonAsignarListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            try {
+                ResultSet rsTrabajosAsignar = daoTrabajos.listarTrabajosSinAsignar();
+                
+                
+                while(rsTrabajosAsignar.next()){
+                    
+                    ResultSet rsCentroColaDisponible = daoCentros.listarCentrosColaDisponible();
+                    int idT = rsTrabajosAsignar.getInt(1);
+                    int opsTrabajoAsignar = rsTrabajosAsignar.getInt(3);
+                    int minimoTiempo = 0;
+                    int idCentroAsignar = 0;
+                    String identifCentro = "";
+                    
+                    while(rsCentroColaDisponible.next()){
+                        
+                        int idC = rsCentroColaDisponible.getInt(1);                        
+                        ResultSet rsProc = daoProcesamiento.TrabajosEnCola(idC);
+                        
+                        int operacionesPendientes = 0;
+                        int cantTrabajosCola = 0;
+                        
+                        while (rsProc.next()){
+                            operacionesPendientes = operacionesPendientes + rsProc.getInt(5);
+                            cantTrabajosCola = cantTrabajosCola +1;
+                        }
+                        
+                        int totalOperaciones = operacionesPendientes + opsTrabajoAsignar;
+                        int capacidadCentro = rsCentroColaDisponible.getInt(3);
+                        int tiempoEjecucion = totalOperaciones / (capacidadCentro + ((cantTrabajosCola+1)*10));
+                        
+                        if(minimoTiempo == 0){
+                            minimoTiempo = tiempoEjecucion;
+                            idCentroAsignar = idC;
+                            identifCentro = rsCentroColaDisponible.getString(2);
+                            
+                            
+                        } else if(minimoTiempo > tiempoEjecucion){
+                            minimoTiempo = tiempoEjecucion;
+                            idCentroAsignar = idC;
+                            identifCentro = rsCentroColaDisponible.getString(2);
+                        }
+                    }
+                    
+                    if(!daoProcesamiento.AsignarProcesamiento(idT, idCentroAsignar, opsTrabajoAsignar)){
+                        JOptionPane.showMessageDialog(null, "No se pudo asignar el trabajo");
+                    }
+                    
+                    if(!daoTrabajos.modificarCentroTrabajo(idT, identifCentro)){
+                        JOptionPane.showMessageDialog(null, "No se pudo actualizar el centro en el trabajo");
+                    }
+
+                }
+                
+                
+            } catch (SQLException ex) {
+            }
+            
+            
+
+            
+        }
+        
+    }
 
     /**
      * Método que limpia los campos de la ventana de <strong>Gestión de
@@ -407,7 +491,7 @@ public class VistaTrabajos extends JFrame {
         txtIdentificador.setText("");
         spnCantidad.setValue(0);
         cboListaPropietarios.setSelectedIndex(0);
-        cboCentros.setSelectedIndex(0);
+        //cboCentros.setSelectedIndex(0);
         btnEliminar.setEnabled(false);
         btnModificar.setEnabled(false);
 

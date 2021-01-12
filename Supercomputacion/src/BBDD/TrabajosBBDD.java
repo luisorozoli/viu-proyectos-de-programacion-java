@@ -49,28 +49,44 @@ public class TrabajosBBDD {
         }
         return rs;
     }
+    
+    public ResultSet listarTrabajosSinAsignar() throws SQLException {
+
+        String sSQL = "SELECT * FROM trabajos where centrotrabajo = \"\" order by idtrabajos";
+
+        try {
+            Connection con = conexion.ConexionBBDD();
+
+            st = con.createStatement();
+            rs = st.executeQuery(sSQL);
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            st.close();
+        }
+        return rs;
+    }
 
     /**
      * Método que inserta un nuevo registro en la tabla de <strong>trabajos</strong>
      * @param sIdentificadorTrabajo String con el <strong>identificador</strong> del trabajo
      * @param iCantidad int con la <strong>cantidad</strong> de operaciones del trabajo
      * @param sPropietario String con el <strong>propietario</strong> del trabajo
-     * @param sIdentCentro String con el <strong>centro</strong> del trabajo
      * @return true o false dependiendo de si se pudo insertar el registro o no.
      * @throws SQLException 
      */
-    public boolean crearTrabajo(String sIdentificadorTrabajo, int iCantidad,  String sPropietario, String sIdentCentro) throws SQLException {
+    public boolean crearTrabajo(String sIdentificadorTrabajo, int iCantidad,  String sPropietario) throws SQLException {
         
         try {
         
-            String sSQL = "INSERT INTO supercomputacion.trabajos(identificador, cantidadoperaciones, propietario, centroTrabajo)VALUES(?,?,?,?)";
+            String sSQL = "INSERT INTO supercomputacion.trabajos(identificador, cantidadoperaciones, propietario)VALUES(?,?,?)";
             Connection con = conexion.ConexionBBDD();
             pst = con.prepareStatement(sSQL);
             //Asignar parámetros
             pst.setString(1, sIdentificadorTrabajo);
             pst.setInt(2, iCantidad);
             pst.setString(3, sPropietario);
-            pst.setString(4, sIdentCentro);
 
             int iFilasInsertadas = pst.executeUpdate();
         
@@ -110,6 +126,25 @@ public class TrabajosBBDD {
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean modificarCentroTrabajo(int idT, String identificadorCentro) throws SQLException {
+        
+        try {
+            
+            String sSQL = "UPDATE trabajos set centroTrabajo = ? where idTrabajos = ?";
+            Connection con = conexion.ConexionBBDD();
+            pst = con.prepareStatement(sSQL);
+
+            //Asignar parámetros
+            pst.setString(1, identificadorCentro);
+            pst.setInt(2, idT);
+
+            int iFilasModificadas = pst.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
             return false;
         }
     }
@@ -186,6 +221,23 @@ public class TrabajosBBDD {
         }
 
         return rs;
+        
+    }
+    
+    public int OperacionTrabajo(int idTrabajo) throws SQLException{
+        
+        String sSQL = "select * from trabajos where idtrabajos = ?";
+        try {
+            Connection con = conexion.ConexionBBDD();
+            pst = con.prepareStatement(sSQL);
+           
+            pst.setInt(1, idTrabajo);
+            rs = pst.executeQuery();
+            
+            
+        } catch (SQLException ex) {
+        }
+        return rs.getInt(3);
         
     }
 }

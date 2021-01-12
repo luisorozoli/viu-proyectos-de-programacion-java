@@ -46,6 +46,26 @@ public class CentrosBBDD {
         }
         return rs;
     }
+    
+    
+    public ResultSet listarCentrosColaDisponible() throws SQLException {
+
+        String sSQL = "SELECT * FROM centros WHERE coladisponible > 0";
+
+        try {
+            Connection con = conexion.ConexionBBDD();
+
+            st = con.createStatement();
+            rs = st.executeQuery(sSQL);
+
+            conexion.desconectar();
+
+        } catch (SQLException ex) {
+        } finally {
+            st.close();
+        }
+        return rs;
+    }
 
     
     /**
@@ -108,7 +128,7 @@ public class CentrosBBDD {
 
         try{
 
-            String sSQL = "INSERT INTO supercomputacion.centros(identificador,capacidadprocesamiento,tamanomaxcola,administrador)VALUES(?,?,?,?)";
+            String sSQL = "INSERT INTO supercomputacion.centros(identificador,capacidadprocesamiento,tamanomaxcola,administrador,coladisponible)VALUES(?,?,?,?,?)";
             Connection con = conexion.ConexionBBDD();
             pst = con.prepareStatement(sSQL);
 
@@ -116,6 +136,8 @@ public class CentrosBBDD {
             pst.setInt(2, cap);
             pst.setInt(3, tamCola);
             pst.setString(4, admin);
+            pst.setInt(5, tamCola);
+            
 
             pst.execute();
             pst.close();
