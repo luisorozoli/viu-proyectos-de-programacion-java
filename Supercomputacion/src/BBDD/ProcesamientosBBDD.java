@@ -62,4 +62,26 @@ public class ProcesamientosBBDD {
         }
     }
     
+    public boolean actualizarOperRestantes(int idProcesamiento,  int iOperRestantes, String sEstadoTrabajo) throws SQLException {
+        
+        try {
+        
+            String sSQL = "update supercomputacion.procesamiento set operacionesrestantes=?, estadotrabajo=? where idprocesamiento = ?";
+            Connection con = conexion.ConexionBBDD();
+            pst = con.prepareStatement(sSQL);
+            //Asignar parámetros
+            pst.setInt(1, iOperRestantes);
+            pst.setString(2, sEstadoTrabajo);
+            pst.setInt(3, idProcesamiento);
+            
+
+            int iFilasInsertadas = pst.executeUpdate();
+        
+            return true;
+        } catch(SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+    
 }
