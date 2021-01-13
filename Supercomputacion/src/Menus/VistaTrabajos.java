@@ -470,6 +470,7 @@ public class VistaTrabajos extends JFrame {
 
                 }
                 
+                refrescarTabla(userp);
                 
             } catch (SQLException ex) {
             }
