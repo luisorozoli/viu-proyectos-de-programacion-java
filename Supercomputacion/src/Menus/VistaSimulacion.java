@@ -116,7 +116,7 @@ public class VistaSimulacion extends JFrame {
                                 iOperRestantes = listaTrabajos.getInt(5);
                                 iOperRestantes = iOperRestantes - iCantidadOperaciones;
                                 System.out.println("Operaciones Restantes Trabajo en Ejecución: "+iOperRestantes);
-                                if (!daoProcesamiento.actualizarOperRestantes(listaTrabajos.getInt(1), iOperRestantes, "En ejecución")) {
+                                if (!daoProcesamiento.actualizarOperRestantes(listaTrabajos.getInt(1), iOperRestantes, "Ejecutando")) {
                                     JOptionPane.showMessageDialog(null, "No se pudo actualizar las operaciones restantes.");
                                 }
                                 break;

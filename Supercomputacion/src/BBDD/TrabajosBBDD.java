@@ -15,8 +15,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- * Clase utilizada para el acceso a los datos de la tabla <strong>trabajos</strong>
+ * Clase utilizada para el acceso a los datos de la tabla
+ * <strong>trabajos</strong>
  * de la base de datos.
+ *
  * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
  */
 public class TrabajosBBDD {
@@ -27,10 +29,13 @@ public class TrabajosBBDD {
     private ConexionBBDD conexion = new ConexionBBDD();
 
     /**
-     * Método que realiza una consulta de todos los registros de la tabla de <strong>
+     * Método que realiza una consulta de todos los registros de la tabla de
+     * <strong>
      * trabajos</strong>.
-     * @return rs ResultSet con todos los registros de la tabla <strong>trabajos</strong>.
-     * @throws SQLException 
+     *
+     * @return rs ResultSet con todos los registros de la tabla
+     * <strong>trabajos</strong>.
+     * @throws SQLException
      */
     public ResultSet listarTrabajos() throws SQLException {
 
@@ -49,7 +54,7 @@ public class TrabajosBBDD {
         }
         return rs;
     }
-    
+
     public ResultSet listarTrabajosSinAsignar() throws SQLException {
 
         String sSQL = "SELECT * FROM trabajos where centrotrabajo = \"\" order by idtrabajos";
@@ -61,6 +66,7 @@ public class TrabajosBBDD {
             rs = st.executeQuery(sSQL);
 
         } catch (SQLException ex) {
+            System.out.println("listarTrabajosSinAsignar");
             ex.printStackTrace();
         } finally {
             st.close();
@@ -69,17 +75,22 @@ public class TrabajosBBDD {
     }
 
     /**
-     * Método que inserta un nuevo registro en la tabla de <strong>trabajos</strong>
-     * @param sIdentificadorTrabajo String con el <strong>identificador</strong> del trabajo
-     * @param iCantidad int con la <strong>cantidad</strong> de operaciones del trabajo
-     * @param sPropietario String con el <strong>propietario</strong> del trabajo
+     * Método que inserta un nuevo registro en la tabla de
+     * <strong>trabajos</strong>
+     *
+     * @param sIdentificadorTrabajo String con el <strong>identificador</strong>
+     * del trabajo
+     * @param iCantidad int con la <strong>cantidad</strong> de operaciones del
+     * trabajo
+     * @param sPropietario String con el <strong>propietario</strong> del
+     * trabajo
      * @return true o false dependiendo de si se pudo insertar el registro o no.
-     * @throws SQLException 
+     * @throws SQLException
      */
-    public boolean crearTrabajo(String sIdentificadorTrabajo, int iCantidad,  String sPropietario) throws SQLException {
-        
+    public boolean crearTrabajo(String sIdentificadorTrabajo, int iCantidad, String sPropietario) throws SQLException {
+
         try {
-        
+
             String sSQL = "INSERT INTO supercomputacion.trabajos(identificador, cantidadoperaciones, propietario)VALUES(?,?,?)";
             Connection con = conexion.ConexionBBDD();
             pst = con.prepareStatement(sSQL);
@@ -89,28 +100,30 @@ public class TrabajosBBDD {
             pst.setString(3, sPropietario);
 
             int iFilasInsertadas = pst.executeUpdate();
-        
+
             return true;
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
         }
     }
 
     /**
-     * Método que realiza el <i>update</i> de un registro de la tabla <strong>trabajos</strong>
+     * Método que realiza el <i>update</i> de un registro de la tabla
+     * <strong>trabajos</strong>
+     *
      * @param trabajo Trabajo que será modificado
-     * @return true o false dependiendo de si se p udo o no realizar el <i>update</i>.
-     * @throws SQLException 
+     * @return true o false dependiendo de si se p udo o no realizar el
+     * <i>update</i>.
+     * @throws SQLException
      */
     public boolean modificarTrabajo(Trabajos trabajo) throws SQLException {
-        
+
         try {
-            
-            System.out.println("idtrabajo en modificarTrabajo: "+trabajo.getiIdTrabajo());
-            System.out.println("identificador: "+trabajo.getsIdentificadorTrab());
-            
-            
+
+            System.out.println("idtrabajo en modificarTrabajo: " + trabajo.getiIdTrabajo());
+            System.out.println("identificador: " + trabajo.getsIdentificadorTrab());
+
             String sSQL = "UPDATE trabajos set identificador = ?, cantidadoperaciones = ?, propietario = ?, centroTrabajo = ? where idTrabajos = ?";
             Connection con = conexion.ConexionBBDD();
             pst = con.prepareStatement(sSQL);
@@ -129,11 +142,11 @@ public class TrabajosBBDD {
             return false;
         }
     }
-    
+
     public boolean modificarCentroTrabajo(int idT, String identificadorCentro) throws SQLException {
-        
+
         try {
-            
+
             String sSQL = "UPDATE trabajos set centroTrabajo = ? where idTrabajos = ?";
             Connection con = conexion.ConexionBBDD();
             pst = con.prepareStatement(sSQL);
@@ -151,12 +164,13 @@ public class TrabajosBBDD {
 
     /**
      * Método que elimina un registro de la tabla de <strong>trabajos</strong>.
+     *
      * @param trabajoId del trabajo que debe ser eliminado.
      * @return true o false dependiendo de si se pudo o no eliminar el usuario.
-     * @throws SQLException 
+     * @throws SQLException
      */
     public boolean eliminarTrabajo(int trabajoId) throws SQLException {
-        
+
         try {
 
             String sSQL = "DELETE FROM trabajos WHERE idtrabajos = ?";
@@ -165,7 +179,7 @@ public class TrabajosBBDD {
             pst.setInt(1, trabajoId);
             int filasEliminadas = pst.executeUpdate();
             return true;
-        
+
         } catch (SQLException ex) {
             return false;
         }
@@ -173,39 +187,42 @@ public class TrabajosBBDD {
 
     /**
      * Método que muestra los trabajos de un usuario propietario
+     *
      * @param us Usuario propietario de los trabajos a mostrar
-     * @return rs ResultSet de la lista de trabajos de un usuario de los cuales es propietario
-     * @throws SQLException 
+     * @return rs ResultSet de la lista de trabajos de un usuario de los cuales
+     * es propietario
+     * @throws SQLException
      */
     public ResultSet listarTrabajosUsuario(Usuarios us) throws SQLException {
-        
+
         int iIdUsuario = us.getUserId();
         String sTipoUsuario = us.getTipoUsuario();
-        System.out.println("iIdUsuario: "+ iIdUsuario);
-        System.out.println("sTipoUsuario: "+ sTipoUsuario);
-        
-        
+        System.out.println("iIdUsuario: " + iIdUsuario);
+        System.out.println("sTipoUsuario: " + sTipoUsuario);
+
         String sSQL = "select * from trabajos tra inner join usuarios user on user.identificador = tra.propietario and user.idusuario = ?";
         try {
             Connection con = conexion.ConexionBBDD();
-           pst = con.prepareStatement(sSQL);
-           
-           pst.setInt(1, iIdUsuario);
-           rs = pst.executeQuery();
+            pst = con.prepareStatement(sSQL);
+
+            pst.setInt(1, iIdUsuario);
+            rs = pst.executeQuery();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return rs;
     }
-    
+
     /**
      * Método que muestra los trabajos de un centro.
-     * @param us Usuario AdministradorCentro 
-     * @return rs ResultSet con todos los trabajos del centro al que pertenece el AdministradorCentro
-     * @throws SQLException 
+     *
+     * @param us Usuario AdministradorCentro
+     * @return rs ResultSet con todos los trabajos del centro al que pertenece
+     * el AdministradorCentro
+     * @throws SQLException
      */
     public ResultSet listarTrabajosCentro(Usuarios us) throws SQLException {
-        
+
         try {
             String sSQL = "select tra.* from trabajos tra  inner join centros cen on cen.identificador = tra.centrotrabajo inner join usuarios usu on usu.identificador = cen.administrador and usu.idusuario = ?";
             Connection con = conexion.ConexionBBDD();
@@ -221,23 +238,23 @@ public class TrabajosBBDD {
         }
 
         return rs;
-        
+
     }
-    
-    public int OperacionTrabajo(int idTrabajo) throws SQLException{
-        
+
+    public int OperacionTrabajo(int idTrabajo) throws SQLException {
+
         String sSQL = "select * from trabajos where idtrabajos = ?";
         try {
             Connection con = conexion.ConexionBBDD();
             pst = con.prepareStatement(sSQL);
-           
+
             pst.setInt(1, idTrabajo);
             rs = pst.executeQuery();
-            
-            
+
         } catch (SQLException ex) {
         }
         return rs.getInt(3);
-        
     }
+    
+    
 }

@@ -10,41 +10,43 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author gonzalodiaz
  */
 public class ProcesamientosBBDD {
-    
-    private final Statement st = null;
+
+    private Statement st = null;
     private ResultSet rs = null;
     private PreparedStatement pst = null;
     private final ConexionBBDD conexion = new ConexionBBDD();
-    
-    public ResultSet TrabajosEnCola (int idC) throws SQLException{
-        
-        String sSQL = "SELECT * from procesamiento where idcentro = ? and estadotrabajo != 'Finalizado'";
-        
-        try {
-                Connection con = conexion.ConexionBBDD();
-                pst = con.prepareStatement(sSQL);
 
-                pst.setInt(1, idC);
-                rs = pst.executeQuery();
-                conexion.desconectar();
-            } catch (SQLException ex) {
-            } finally {
-                pst.close();
-            }
-            return rs;
-        
-    }
-    
-    public boolean AsignarProcesamiento(int identificadorTrabajo, int identificadorCentro,  int operaciones) throws SQLException {
-        
+    public ResultSet TrabajosEnCola(int idC) throws SQLException {
+
+        String sSQL = "SELECT * from procesamiento where idcentro = ? and estadotrabajo != 'Finalizado'";
+
         try {
-        
+            Connection con = conexion.ConexionBBDD();
+            pst = con.prepareStatement(sSQL);
+
+            pst.setInt(1, idC);
+            rs = pst.executeQuery();
+            conexion.desconectar();
+        } catch (SQLException ex) {
+        } finally {
+            pst.close();
+        }
+        return rs;
+
+    }
+
+    public boolean AsignarProcesamiento(int identificadorTrabajo, int identificadorCentro, int operaciones) throws SQLException {
+
+        try {
+
             String sSQL = "INSERT INTO supercomputacion.procesamiento(idtrabajo, idcentro, estadotrabajo, operacionesrestantes)VALUES(?,?,'Asignado',?)";
             Connection con = conexion.ConexionBBDD();
             pst = con.prepareStatement(sSQL);
@@ -54,18 +56,18 @@ public class ProcesamientosBBDD {
             pst.setInt(3, operaciones);
 
             int iFilasInsertadas = pst.executeUpdate();
-        
+
             return true;
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
         }
     }
-    
-    public boolean actualizarOperRestantes(int idProcesamiento,  int iOperRestantes, String sEstadoTrabajo) throws SQLException {
-        
+
+    public boolean actualizarOperRestantes(int idProcesamiento, int iOperRestantes, String sEstadoTrabajo) throws SQLException {
+
         try {
-        
+
             String sSQL = "update supercomputacion.procesamiento set operacionesrestantes=?, estadotrabajo=? where idprocesamiento = ?";
             Connection con = conexion.ConexionBBDD();
             pst = con.prepareStatement(sSQL);
@@ -73,15 +75,29 @@ public class ProcesamientosBBDD {
             pst.setInt(1, iOperRestantes);
             pst.setString(2, sEstadoTrabajo);
             pst.setInt(3, idProcesamiento);
-            
 
             int iFilasInsertadas = pst.executeUpdate();
-        
+
             return true;
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
         }
     }
-    
+
+    public ResultSet listaHistoricoTrabajos() {
+        ResultSet rsHistTrabajos = null;
+        String sSQL = "select tra.idtrabajos, tra.identificador, tra.propietario, tra.centroTrabajo, proc.estadotrabajo\n"
+                + "from procesamiento proc\n"
+                + "inner join trabajos tra on proc.idtrabajo = tra.idtrabajos and proc.estadotrabajo = 'Finalizado'";
+        Connection con = conexion.ConexionBBDD();
+        try {
+            st = con.createStatement();
+            rsHistTrabajos = st.executeQuery(sSQL);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return rsHistTrabajos;
+    }
+
 }

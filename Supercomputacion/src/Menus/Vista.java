@@ -155,7 +155,11 @@ public class Vista extends JFrame{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            VistaInformacion vi = new VistaInformacion();
+            try {
+                VistaInformacion vi = new VistaInformacion();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 }
