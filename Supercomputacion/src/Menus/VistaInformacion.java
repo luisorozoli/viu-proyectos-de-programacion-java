@@ -34,7 +34,7 @@ public class VistaInformacion extends JFrame {
     TrabajosBBDD daoTrabajos = new TrabajosBBDD();
     CentrosBBDD daoCentro = new CentrosBBDD();
     ProcesamientosBBDD daoProcesamiento = new ProcesamientosBBDD();
-
+    JLabel lblInformacion;
     //Declaración de botones y otros componentes
     public VistaInformacion() throws SQLException {
 
@@ -68,8 +68,11 @@ public class VistaInformacion extends JFrame {
         this.getContentPane().add(btnTrabajosEnProceso, new AbsoluteConstraints(150, 110, 200, 20));
         this.getContentPane().add(btnHistoricoTrabajos, new AbsoluteConstraints(150, 140, 200, 20));
 
+        //Etiqueta informacion
+        lblInformacion = new JLabel("Seleccione centro en: Cola de Trab. por Centro y Trab. en Proc. por Centro");
+        this.getContentPane().add(lblInformacion, new AbsoluteConstraints(13,170,500, 20));
         btnSimulacion.addActionListener((ActionListener) new BotonSimularListener());
-
+        
         btnTrabajosSinAsignar.addActionListener((ActionListener) new BotonTrabajosSinAsignar());
         btnColaTrabajosCentro.addActionListener((ActionListener) new BotonColaTrabajosCentro());
         btnTrabajosEnProceso.addActionListener((ActionListener) new BotonTrabajosEnProceso());
@@ -149,12 +152,11 @@ public class VistaInformacion extends JFrame {
             this.model.removeRow(0);
         }
         int i = 0;
-        
-//        while(tblDatos.getColumnCount()>0) {
-//            TableColumn columnaABorrar = tblDatos.getColumn(i);
-//            tblDatos.removeColumn(columnaABorrar);
-//            i++;
-//        }
+        if(tblDatos.getColumnCount()>0) {
+                model.setColumnCount(0);
+        }
+
+
         System.out.println(tblDatos.getColumnCount());
         model.addColumn("Id_Trabajo");
         model.addColumn("Identificador");
@@ -184,6 +186,10 @@ public class VistaInformacion extends JFrame {
     public void MostrarColaTrabajosCentro(String identCentro) {
         while (this.model.getRowCount() > 0) {
             this.model.removeRow(0);
+        }
+        
+        if(tblDatos.getColumnCount()>0) {
+                model.setColumnCount(0);
         }
 
         model.addColumn("Id_Trabajo");
@@ -216,6 +222,10 @@ public class VistaInformacion extends JFrame {
     public void MostrarTrabajosEnProcesoCentro(String identCentro) {
         while (this.model.getRowCount() > 0) {
             this.model.removeRow(0);
+        }
+        
+        if(tblDatos.getColumnCount()>0) {
+                model.setColumnCount(0);
         }
 
         model.addColumn("Id_Trabajo");
@@ -250,6 +260,10 @@ public class VistaInformacion extends JFrame {
     public void MostrarHistoricoTrabajosProcesados() {
         while (this.model.getRowCount() > 0) {
             this.model.removeRow(0);
+        }
+        
+        if(tblDatos.getColumnCount()>0) {
+                model.setColumnCount(0);
         }
 
         model.addColumn("Id_Trabajo");

@@ -139,6 +139,7 @@ public class VistaSimulacion extends JFrame {
                             }
                         }
                     }
+                     JOptionPane.showMessageDialog(null, "Simulación finalizada.");
                 } catch (SQLException ex) {
                 }
             } else {
