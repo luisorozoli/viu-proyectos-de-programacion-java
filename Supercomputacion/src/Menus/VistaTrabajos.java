@@ -12,8 +12,6 @@ import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import static javax.swing.SwingConstants.RIGHT;
 import javax.swing.table.DefaultTableModel;
@@ -92,11 +90,6 @@ public class VistaTrabajos extends JFrame {
         lblPropietario.setHorizontalAlignment(RIGHT);
         this.getContentPane().add(lblPropietario, new AbsoluteConstraints(10, 120, 100, 20));
 
-        //Centros
-        //lblCentros = new JLabel("Centros");
-        //lblCentros.setHorizontalAlignment(RIGHT);
-        //this.getContentPane().add(lblCentros, new AbsoluteConstraints(10, 150, 100, 20));
-
         //CUADROS DE TEXTO
         txtIdentificador = new JTextField();
         this.getContentPane().add(txtIdentificador, new AbsoluteConstraints(120, 60, 200, 20));
@@ -118,16 +111,7 @@ public class VistaTrabajos extends JFrame {
         listaCentrosTrabajos = (ArrayList<String>) daoCentros.listarCentrosTrabajos();
 
         this.getContentPane().add(cboListaPropietarios, new AbsoluteConstraints(120, 120, 200, 20));
-/*
-        
-        cboCentros = new JComboBox();
 
-        for (int i = 0; i < listaCentrosTrabajos.size(); i++) {
-            cboCentros.addItem(listaCentrosTrabajos.get(i));
-        }
-
-        this.getContentPane().add(cboCentros, new AbsoluteConstraints(120, 150, 200, 20));
-*/
         //Se crea la tabla donde se muestra el listado de trabajos
         tblDatos = new JTable();
         scroll = new JScrollPane();
@@ -140,7 +124,7 @@ public class VistaTrabajos extends JFrame {
 
         tblDatos.setModel(model);
         scroll.setViewportView(tblDatos);
-        this.getContentPane().add(scroll, new AbsoluteConstraints(20, 220, 460, 260));
+        this.getContentPane().add(scroll, new AbsoluteConstraints(20, 220, 460, 235));
 
         //Se crean los botones
         btnAgregar = new JButton("Agregar");
@@ -309,7 +293,6 @@ public class VistaTrabajos extends JFrame {
                             JOptionPane.showMessageDialog(null, "No se ha podido modificar el trabajo");
                         }
                     } catch (SQLException ex) {
-                        ex.printStackTrace();
                     }
                 }
 
@@ -341,7 +324,6 @@ public class VistaTrabajos extends JFrame {
                         JOptionPane.showMessageDialog(null, "No es posible eliminar el trabajo");
                     }
                 } catch (SQLException ex) {
-                    ex.printStackTrace();
                 }
             }
         }
@@ -370,6 +352,7 @@ public class VistaTrabajos extends JFrame {
      * trabajos, en cambio, si es AdministradorCentro solo verá los que
      * administra.
      */
+    
     //Rellenar tabla de Trabajos
     public void refrescarTabla(Usuarios userTrabajo) {
         while (this.model.getRowCount() > 0) {
@@ -383,8 +366,6 @@ public class VistaTrabajos extends JFrame {
 
         try {
             if ("administrador".equals(userTrabajo.getTipoUsuario().toLowerCase())) {
-//                lista = daoTrabajos.listarTrabajosUsuario(us);
-
                 lista = daoTrabajos.listarTrabajos();
             } else if ("usuario".equals(userTrabajo.getTipoUsuario().toLowerCase())) {
                 lista = daoTrabajos.listarTrabajosUsuario(us);
@@ -403,10 +384,8 @@ public class VistaTrabajos extends JFrame {
 
             }
             this.tblDatos.setModel(this.model);
-//            }
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
         }
 
     }
@@ -424,28 +403,34 @@ public class VistaTrabajos extends JFrame {
                 while(rsTrabajosAsignar.next()){
                     
                     ResultSet rsCentroColaDisponible = daoCentros.listarCentrosColaDisponible();
+
+                    int cantCentrosDisponible = 0;
+                                        
                     int idT = rsTrabajosAsignar.getInt(1);
                     int opsTrabajoAsignar = rsTrabajosAsignar.getInt(3);
                     int minimoTiempo = 0;
                     int idCentroAsignar = 0;
+                    int operacionesPendientes = 0;
+                    int cantTrabajosCola = 0;
+                    int totalOperaciones,capacidadCentro, idC, tiempoEjecucion;
                     String identifCentro = "";
                     
                     while(rsCentroColaDisponible.next()){
                         
-                        int idC = rsCentroColaDisponible.getInt(1);                        
+                        idC = rsCentroColaDisponible.getInt(1);                        
                         ResultSet rsProc = daoProcesamiento.TrabajosEnCola(idC);
                         
-                        int operacionesPendientes = 0;
-                        int cantTrabajosCola = 0;
+                        operacionesPendientes = 0;
+                        cantTrabajosCola = 0;
                         
                         while (rsProc.next()){
                             operacionesPendientes = operacionesPendientes + rsProc.getInt(5);
                             cantTrabajosCola = cantTrabajosCola +1;
                         }
                         
-                        int totalOperaciones = operacionesPendientes + opsTrabajoAsignar;
-                        int capacidadCentro = rsCentroColaDisponible.getInt(3);
-                        int tiempoEjecucion = totalOperaciones / (capacidadCentro + ((cantTrabajosCola+1)*10));
+                        totalOperaciones = operacionesPendientes + opsTrabajoAsignar;
+                        capacidadCentro = rsCentroColaDisponible.getInt(3);
+                        tiempoEjecucion = totalOperaciones / (capacidadCentro + ((cantTrabajosCola+1)*10));
                         
                         if(minimoTiempo == 0){
                             minimoTiempo = tiempoEjecucion;
@@ -458,14 +443,31 @@ public class VistaTrabajos extends JFrame {
                             idCentroAsignar = idC;
                             identifCentro = rsCentroColaDisponible.getString(2);
                         }
+                        
+                        cantCentrosDisponible++;
                     }
                     
-                    if(!daoProcesamiento.AsignarProcesamiento(idT, idCentroAsignar, opsTrabajoAsignar)){
+                    if(cantCentrosDisponible == 0){
+                        System.out.println("pase por aqui");
+                        break;
+                    }
+                    
+                    if(daoProcesamiento.AsignarProcesamiento(idT, idCentroAsignar, opsTrabajoAsignar)){
+                        System.out.println("Trabajo asignado: "+idT);
+                    } else {                    
                         JOptionPane.showMessageDialog(null, "No se pudo asignar el trabajo");
                     }
                     
-                    if(!daoTrabajos.modificarCentroTrabajo(idT, identifCentro)){
+                    if(daoTrabajos.modificarCentroTrabajo(idT, identifCentro)){
+                        System.out.println("Centro asignado: "+identifCentro);
+                    } else {
                         JOptionPane.showMessageDialog(null, "No se pudo actualizar el centro en el trabajo");
+                    }
+                    
+                    if(daoCentros.disminuirColaCentro(identifCentro)){
+                        System.out.println("Cola disponible actualizada del centro: "+identifCentro);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se pudo actualizar la disponibilidad de coal del centro");
                     }
 
                 }
@@ -474,13 +476,9 @@ public class VistaTrabajos extends JFrame {
                 
             } catch (SQLException ex) {
             }
-            
-            
-
-            
         }
-        
     }
+    
 
     /**
      * Método que limpia los campos de la ventana de <strong>Gestión de
@@ -492,7 +490,6 @@ public class VistaTrabajos extends JFrame {
         txtIdentificador.setText("");
         spnCantidad.setValue(0);
         cboListaPropietarios.setSelectedIndex(0);
-        //cboCentros.setSelectedIndex(0);
         btnEliminar.setEnabled(false);
         btnModificar.setEnabled(false);
 

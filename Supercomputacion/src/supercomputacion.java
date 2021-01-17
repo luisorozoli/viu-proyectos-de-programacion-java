@@ -1,6 +1,4 @@
 import Menus.*;
-import java.sql.ResultSet;
-import BBDD.*;
 import java.sql.SQLException;
 
 /**
@@ -14,12 +12,6 @@ public class supercomputacion{
                
         MenuLogin menuLogin = new MenuLogin();
         menuLogin.MenuLogin();
-               
-        ProcesamientosBBDD proc = new ProcesamientosBBDD();
-        ResultSet rs = proc.TrabajosEnCola(4);
         
-        while(rs.next()){
-            System.out.println(rs.getInt(2)+"Hola");
-        }
     }
 }

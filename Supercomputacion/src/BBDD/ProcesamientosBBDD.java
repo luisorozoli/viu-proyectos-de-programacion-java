@@ -10,8 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -34,10 +32,11 @@ public class ProcesamientosBBDD {
 
             pst.setInt(1, idC);
             rs = pst.executeQuery();
-            conexion.desconectar();
+            
         } catch (SQLException ex) {
         } finally {
             pst.close();
+            conexion.desconectar();
         }
         return rs;
 
@@ -56,10 +55,12 @@ public class ProcesamientosBBDD {
             pst.setInt(3, operaciones);
 
             int iFilasInsertadas = pst.executeUpdate();
+            
+            pst.close();
+            conexion.desconectar();
 
             return true;
         } catch (SQLException ex) {
-            ex.printStackTrace();
             return false;
         }
     }
@@ -77,10 +78,12 @@ public class ProcesamientosBBDD {
             pst.setInt(3, idProcesamiento);
 
             int iFilasInsertadas = pst.executeUpdate();
+            
+            pst.close();
+            conexion.desconectar();
 
             return true;
         } catch (SQLException ex) {
-            ex.printStackTrace();
             return false;
         }
     }
@@ -94,8 +97,11 @@ public class ProcesamientosBBDD {
         try {
             st = con.createStatement();
             rsHistTrabajos = st.executeQuery(sSQL);
+            
+            st.close();
+            conexion.desconectar();
+            
         } catch (SQLException ex) {
-            ex.printStackTrace();
         }
         return rsHistTrabajos;
     }

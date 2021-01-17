@@ -41,30 +41,53 @@ public class CentrosBBDD {
             st = con.createStatement();
             rs = st.executeQuery(sSQL);
 
-            conexion.desconectar();
-
         } catch (SQLException ex) {
         } finally {
             st.close();
+            conexion.desconectar();
         }
         return rs;
     }
+    
+    
+        public ResultSet listarCentros(String identif) throws SQLException {
 
-    public ResultSet listarCentrosColaDisponible() throws SQLException {
-
-        String sSQL = "SELECT * FROM centros WHERE coladisponible > 0";
+        String sSQL = "SELECT * FROM centros where identificador = ?";
 
         try {
             Connection con = conexion.ConexionBBDD();
+            pst = con.prepareStatement(sSQL);
 
-            st = con.createStatement();
-            rs = st.executeQuery(sSQL);
+            pst.setString(1, identif);
+            rs = pst.executeQuery();
+            } catch (SQLException ex) {
+            } finally {
+                pst.close();
+                conexion.desconectar();
+            }
+            return rs;
+    }
+    
+    
+    
 
-            conexion.desconectar();
+    public ResultSet listarCentrosColaDisponible() throws SQLException {
 
+        String sSQL = "SELECT * FROM centros WHERE coladisponible > ?";
+
+        try {
+            Connection con = conexion.ConexionBBDD();
+            pst = con.prepareStatement(sSQL);
+            
+            pst.setInt(1, 0);
+            rs = pst.executeQuery();
+            
         } catch (SQLException ex) {
+            System.out.println("Fallo la consulta de centros con cola disponible");
+            ex.printStackTrace();
         } finally {
-            st.close();
+            pst.close();
+            conexion.desconectar();
         }
         return rs;
     }
@@ -95,10 +118,10 @@ public class CentrosBBDD {
                 st = con.createStatement();
                 rs = st.executeQuery(sSQL);
 
-                conexion.desconectar();
             } catch (SQLException ex) {
             } finally {
                 st.close();
+                conexion.desconectar();
             }
             return rs;
         } else {
@@ -110,10 +133,10 @@ public class CentrosBBDD {
 
                 pst.setString(1, userAdmin.getIdentificador());
                 rs = pst.executeQuery();
-                conexion.desconectar();
             } catch (SQLException ex) {
             } finally {
                 pst.close();
+                conexion.desconectar();
             }
             return rs;
         }
@@ -178,6 +201,7 @@ public class CentrosBBDD {
                 ps.setString(4, center.getsAdministrador());
                 ps.setInt(5, center.getIdCentro());
                 ps.execute();
+                ps.close();
             }
             conexion.desconectar();
             return true;
@@ -186,6 +210,82 @@ public class CentrosBBDD {
         }
 
     }
+    
+    
+    
+    /**
+     * Método que realiza el <i>update</i> de la disponibilidad de la cola de 
+     * trabajos del centro.
+     * @param identifCentro
+     * @return true o false dependiendo de si se pudo o no realizar el
+     * <i>update</i>.
+     * @throws SQLException
+     */
+    public boolean disminuirColaCentro(String identifCentro) throws SQLException {
+        
+        int coladispo = 0;
+        
+        rs = listarCentros(identifCentro);
+        
+        while(rs.next()){
+            coladispo = rs.getInt(6);
+            System.out.println("Cola disponible: "+coladispo);
+        }
+                
+        String sql = "UPDATE centros SET coladisponible=? WHERE identificador =?";
+        try {
+            Connection con = conexion.ConexionBBDD();
+            
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setInt(1, coladispo-1);
+            st.setString(2, identifCentro);
+            st.execute();
+            
+            conexion.desconectar();
+            return true;
+            
+        } catch (SQLException ex) {
+            return false;
+        }
+    }
+    
+    /**
+     * Método que realiza el <i>update</i> de la disponibilidad de la cola de 
+     * trabajos del centro aumentandolo en 1.
+     * @param identifCentro
+     * @return true o false dependiendo de si se pudo o no realizar el
+     * <i>update</i>.
+     * @throws SQLException
+     */
+    public boolean incrementarColaCentro(String identifCentro) throws SQLException {
+        
+        int coladispo = 0;
+        
+        rs = listarCentros(identifCentro);
+        
+        while(rs.next()){
+            coladispo = rs.getInt(6);
+            System.out.println("Cola disponible: "+coladispo);
+        }
+                
+        String sql = "UPDATE centros SET coladisponible=? WHERE identificador =?";
+        try {
+            Connection con = conexion.ConexionBBDD();
+            
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setInt(1, coladispo+1);
+            st.setString(2, identifCentro);
+            st.execute();
+            
+            conexion.desconectar();
+            return true;
+            
+        } catch (SQLException ex) {
+            return false;
+        }
+    }
+    
+    
 
     /**
      * Método que elimina un registro de la tabla de <strong>centros</strong>.
@@ -202,6 +302,7 @@ public class CentrosBBDD {
             try (PreparedStatement ps = conexion.ConexionBBDD().prepareStatement(sSQL)) {
                 ps.setInt(1, id);
                 ps.execute();
+                ps.close();
             }
             conexion.desconectar();
             return true;
@@ -221,10 +322,11 @@ public class CentrosBBDD {
 
             st = con.createStatement();
             rs = st.executeQuery(sSQL);
+            
         } catch (SQLException ex) {
-            ex.printStackTrace();
         } finally {
             st.close();
+            conexion.desconectar();
         }
 
         try {
@@ -232,7 +334,6 @@ public class CentrosBBDD {
                 lista.add(rs.getString(2));
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
         }
         return lista;
     }
@@ -255,12 +356,16 @@ public class CentrosBBDD {
             String sSQL2 = "select tra.idtrabajos, tra.identificador, tra.cantidadoperaciones, tra.propietario, proc.estadotrabajo, tra.centroTrabajo  from procesamiento proc\n"
                     + "inner join trabajos tra on proc.idtrabajo = tra.idtrabajos\n"
                     + "where proc.estadotrabajo!='Finalizado' and proc.idcentro = ?";
-            PreparedStatement pst2 = con.prepareStatement(sSQL2);
-            pst2.setInt(1, iIdCentro);
-            rsColaTrabajosCentro = pst2.executeQuery();
+            try (PreparedStatement pst2 = con.prepareStatement(sSQL2)) {
+                pst2.setInt(1, iIdCentro);
+                rsColaTrabajosCentro = pst2.executeQuery();
+                
+            }
+            
+            pst.close();
+            conexion.desconectar();
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (SQLException ex) {
         }
         return rsColaTrabajosCentro;
     }
@@ -287,8 +392,10 @@ public class CentrosBBDD {
             pst2.setInt(1, iIdCentro);
             rsTrabajosProcesoCentro=pst2.executeQuery();
             
+            pst.close();
+            conexion.desconectar();
+            
         } catch (SQLException ex) {
-            ex.printStackTrace();
         }
         return rsTrabajosProcesoCentro;
     }

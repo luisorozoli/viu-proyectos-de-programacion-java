@@ -10,18 +10,15 @@ import BBDD.ProcesamientosBBDD;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import static java.lang.Integer.parseInt;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.JTextField;
+
 
 /**
  *
@@ -108,14 +105,13 @@ public class VistaSimulacion extends JFrame {
                         iCantidadOperaciones = iSegundos * iCapacidadProc;
                         //Lista trabajos del centro
                         ResultSet listaTrabajos = daoProcesamiento.TrabajosEnCola(listaCentros.getInt(1));
-                        System.out.println("Centro: "+ listaCentros.getString(2));
-                        System.out.println("listaTrabajos: "+listaTrabajos);
+                        
                         while (listaTrabajos.next()) {
-                            System.out.println("Trabajo ID: "+listaTrabajos.getInt(2));
+
                             if (iCantidadOperaciones < listaTrabajos.getInt(5)) {
                                 iOperRestantes = listaTrabajos.getInt(5);
                                 iOperRestantes = iOperRestantes - iCantidadOperaciones;
-                                System.out.println("Operaciones Restantes Trabajo en Ejecución: "+iOperRestantes);
+                                
                                 if (!daoProcesamiento.actualizarOperRestantes(listaTrabajos.getInt(1), iOperRestantes, "Ejecutando")) {
                                     JOptionPane.showMessageDialog(null, "No se pudo actualizar las operaciones restantes.");
                                 }
@@ -124,17 +120,26 @@ public class VistaSimulacion extends JFrame {
                                 iOperRestantes = listaTrabajos.getInt(5);
                                 iOperRestantes = iOperRestantes - iCantidadOperaciones;
                                 iCantidadOperaciones = iCantidadOperaciones - iOperRestantes - (10*iCapacidadProc) ;
-                                System.out.println("Operaciones Restantes Trabajo Finalizado: "+iOperRestantes);
+                                
                                 if (!daoProcesamiento.actualizarOperRestantes(listaTrabajos.getInt(1), 0, "Finalizado")) {
                                     JOptionPane.showMessageDialog(null, "No se pudo actualizar las operaciones restantes.");
                                 }
+                                
+                                if(!daoCentro.incrementarColaCentro(listaCentros.getString(2))){
+                                    JOptionPane.showMessageDialog(null, "No se pudo incrementar la cola del centro.");
+                                }
+                                
                             } else {
                                 iOperRestantes = listaTrabajos.getInt(5);
                                 iOperRestantes = iOperRestantes - iCantidadOperaciones;
                                 iCantidadOperaciones = iCantidadOperaciones - iOperRestantes - (10*iCapacidadProc) ;
-                                System.out.println("Operaciones Restantes Trabajo Finalizado: "+iOperRestantes);
+                                
                                 if (!daoProcesamiento.actualizarOperRestantes(listaTrabajos.getInt(1), 0, "Finalizado")) {
                                     JOptionPane.showMessageDialog(null, "No se pudo actualizar las operaciones restantes.");
+                                }
+                                
+                                if(!daoCentro.incrementarColaCentro(listaCentros.getString(2))){
+                                    JOptionPane.showMessageDialog(null, "No se pudo incrementar la cola del centro.");
                                 }
                             }
                         }

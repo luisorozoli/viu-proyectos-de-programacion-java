@@ -44,6 +44,9 @@ public class UsuariosBBDD {
         pst.setString(2, sClave);
         
         ResultSet rs = pst.executeQuery();
+        pst.close();
+        pst = null;
+        conexion.desconectar();
         
         return rs;
     }
@@ -70,6 +73,8 @@ public class UsuariosBBDD {
         } catch(SQLException ex) {
         } finally {
             st.close();
+            st = null;
+            conexion.desconectar();
         }
         return rs;
     }
@@ -98,6 +103,8 @@ public class UsuariosBBDD {
         } catch(SQLException ex) {
         } finally {
             st.close();
+            st = null;
+            conexion.desconectar();
         }
         
         try{
@@ -160,6 +167,7 @@ public class UsuariosBBDD {
                 ps.setString(3, u.getTipoUsuario());
                 ps.setInt(4, u.getUserId());
                 ps.execute();
+                ps.close();
             }
             conexion.desconectar();
             return true;
@@ -182,6 +190,7 @@ public class UsuariosBBDD {
             try (PreparedStatement ps = conexion.ConexionBBDD().prepareStatement(sSQL)) {
                 ps.setInt(1, id);
                 ps.execute();
+                ps.close();
             }
             conexion.desconectar();
             return true;
@@ -190,7 +199,7 @@ public class UsuariosBBDD {
         }
     }
     
-        public ArrayList<String> listarPropietariosTrabajos(Usuarios u) throws SQLException {
+    public ArrayList<String> listarPropietariosTrabajos(Usuarios u) throws SQLException {
         
         ArrayList<String> lista = new ArrayList<>();
         String sSQL = "";
@@ -204,6 +213,7 @@ public class UsuariosBBDD {
             ex.printStackTrace();
         } finally {
             st.close();
+            conexion.desconectar();
         }
         } else {
             sSQL = "SELECT * from usuarios where idusuario = ?";
@@ -216,6 +226,7 @@ public class UsuariosBBDD {
                 ex.printStackTrace();
             } finally {
                 pst.close();
+                conexion.desconectar();
             }
             
         }

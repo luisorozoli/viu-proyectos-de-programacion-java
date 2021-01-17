@@ -12,7 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+
 
 /**
  * Clase utilizada para el acceso a los datos de la tabla
@@ -39,7 +39,7 @@ public class TrabajosBBDD {
      */
     public ResultSet listarTrabajos() throws SQLException {
 
-        String sSQL = "SELECT * FROM trabajos";
+        String sSQL = "select * from trabajos tra where tra.idtrabajos not in(select proc.idtrabajo from procesamiento proc);";
 
         try {
             Connection con = conexion.ConexionBBDD();
@@ -48,9 +48,10 @@ public class TrabajosBBDD {
             rs = st.executeQuery(sSQL);
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
         } finally {
             st.close();
+            conexion.desconectar();
+            
         }
         return rs;
     }
@@ -67,9 +68,9 @@ public class TrabajosBBDD {
 
         } catch (SQLException ex) {
             System.out.println("listarTrabajosSinAsignar");
-            ex.printStackTrace();
         } finally {
             st.close();
+            conexion.desconectar();
         }
         return rs;
     }
@@ -100,10 +101,11 @@ public class TrabajosBBDD {
             pst.setString(3, sPropietario);
 
             int iFilasInsertadas = pst.executeUpdate();
-
+            
+            pst.close();
+            conexion.desconectar();
             return true;
         } catch (SQLException ex) {
-            ex.printStackTrace();
             return false;
         }
     }
@@ -136,9 +138,12 @@ public class TrabajosBBDD {
             pst.setInt(5, trabajo.getiIdTrabajo());
 
             int iFilasModificadas = pst.executeUpdate();
+            
+            pst.close();
+            conexion.desconectar();
+            
             return true;
         } catch (SQLException ex) {
-            ex.printStackTrace();
             return false;
         }
     }
@@ -156,6 +161,10 @@ public class TrabajosBBDD {
             pst.setInt(2, idT);
 
             int iFilasModificadas = pst.executeUpdate();
+            
+            pst.close();
+            conexion.desconectar();
+            
             return true;
         } catch (SQLException ex) {
             return false;
@@ -178,6 +187,10 @@ public class TrabajosBBDD {
             pst = con.prepareStatement(sSQL);
             pst.setInt(1, trabajoId);
             int filasEliminadas = pst.executeUpdate();
+            
+            pst.close();
+            conexion.desconectar();
+            
             return true;
 
         } catch (SQLException ex) {
@@ -200,15 +213,20 @@ public class TrabajosBBDD {
         System.out.println("iIdUsuario: " + iIdUsuario);
         System.out.println("sTipoUsuario: " + sTipoUsuario);
 
-        String sSQL = "select * from trabajos tra inner join usuarios user on user.identificador = tra.propietario and user.idusuario = ?";
+        String sSQL = "select *\n" +
+"from trabajos tra\n" +
+"inner join usuarios us on us.identificador = tra.propietario and us.idusuario = ? and not exists(select * from procesamiento proc where proc.idtrabajo = tra.idtrabajos and proc.estadotrabajo='Finalizado');";
         try {
             Connection con = conexion.ConexionBBDD();
             pst = con.prepareStatement(sSQL);
 
             pst.setInt(1, iIdUsuario);
             rs = pst.executeQuery();
+            
+            pst.close();
+            conexion.desconectar();
+            
         } catch (SQLException ex) {
-            ex.printStackTrace();
         }
         return rs;
     }
@@ -224,17 +242,17 @@ public class TrabajosBBDD {
     public ResultSet listarTrabajosCentro(Usuarios us) throws SQLException {
 
         try {
-            String sSQL = "select tra.* from trabajos tra  inner join centros cen on cen.identificador = tra.centrotrabajo inner join usuarios usu on usu.identificador = cen.administrador and usu.idusuario = ?";
+            String sSQL = "select tra.* from trabajos tra  inner join centros cen on cen.identificador = tra.centrotrabajo inner join usuarios usu on usu.identificador = cen.administrador and usu.idusuario = ? and tra.idtrabajos in (select proc.idtrabajo from procesamiento proc where proc.estadotrabajo != 'Finalizado')";
             Connection con = conexion.ConexionBBDD();
             pst = con.prepareStatement(sSQL);
             pst.setInt(1, us.getUserId());
             rs = pst.executeQuery();
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
             System.out.println(ex.getErrorCode());
         } finally {
             pst.close();
+            conexion.desconectar();
         }
 
         return rs;
@@ -250,6 +268,9 @@ public class TrabajosBBDD {
 
             pst.setInt(1, idTrabajo);
             rs = pst.executeQuery();
+            
+            pst.close();
+            conexion.desconectar();
 
         } catch (SQLException ex) {
         }
