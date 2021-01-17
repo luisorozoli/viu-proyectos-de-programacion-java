@@ -12,8 +12,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
+ * Clase utilizada para el acceso a los datos de la tabla
+ * <strong>procesamientos</strong>
+ * de la base de datos.
  *
- * @author gonzalodiaz
+ * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
  */
 public class ProcesamientosBBDD {
 
@@ -42,6 +45,19 @@ public class ProcesamientosBBDD {
 
     }
 
+    /**
+     * Método que inserta un nuevo registro en la tabla de
+     * <strong>procesamiento</strong>
+     *
+     * @param identificadorTrabajo con el <strong>idtrabajo</strong>
+     * del procesamiento
+     * @param identificadorCentro con la <strong>idcentro</strong>
+     * del procesamiento
+     * @param operaciones  con el <strong>operacionesrestantes</strong>
+     * del procesamiento
+     * @return true o false dependiendo de si se pudo insertar el registro o no.
+     * @throws SQLException
+     */
     public boolean AsignarProcesamiento(int identificadorTrabajo, int identificadorCentro, int operaciones) throws SQLException {
 
         try {
@@ -65,6 +81,19 @@ public class ProcesamientosBBDD {
         }
     }
 
+    /**
+     * Método que actualiza un registro en la tabla de
+     * <strong>procesamiento</strong>
+     *
+     * @param idProcesamiento con el <strong>idprocesamiento</strong>
+     * del procesamiento
+     * @param iOperRestantes con la <strong>operacionesrestantes</strong>
+     * del procesamiento
+     * @param sEstadoTrabajo  con el <strong>estadotrabajo</strong>
+     * del procesamiento
+     * @return true o false dependiendo de si se pudo insertar el registro o no.
+     * @throws SQLException
+     */
     public boolean actualizarOperRestantes(int idProcesamiento, int iOperRestantes, String sEstadoTrabajo) throws SQLException {
 
         try {
@@ -88,6 +117,13 @@ public class ProcesamientosBBDD {
         }
     }
 
+     /**
+     * Método que lista el histirico de trabajos de la tabla
+     * <strong>procesamiento</strong>
+     *
+     * @return true o false dependiendo de si se pudo insertar el registro o no.
+     * @throws SQLException
+     */
     public ResultSet listaHistoricoTrabajos() {
         ResultSet rsHistTrabajos = null;
         String sSQL = "select tra.idtrabajos, tra.identificador, tra.propietario, tra.centroTrabajo, proc.estadotrabajo\n"

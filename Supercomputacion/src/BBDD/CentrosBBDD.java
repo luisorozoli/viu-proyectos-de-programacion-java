@@ -49,8 +49,16 @@ public class CentrosBBDD {
         return rs;
     }
     
-    
-        public ResultSet listarCentros(String identif) throws SQLException {
+    /**
+     * Método se utiliza para obtener un listado de centros en base al usuario
+     * que realiza la consulta
+     *
+     * @param identif String con el <strong>identificador</strong> del centro
+     * @return ResultSet con todos los registros de la tabla de <strong>
+     * centros</strong>.
+     * @throws SQLException
+     */
+    public ResultSet listarCentros(String identif) throws SQLException {
 
         String sSQL = "SELECT * FROM centros where identificador = ?";
 
@@ -68,9 +76,14 @@ public class CentrosBBDD {
             return rs;
     }
     
-    
-    
-
+    /**
+     * Método se utiliza para obtener un listado de centros en base a la cola
+     * disponible
+     *
+     * @return ResultSet con todos los registros de la tabla de <strong>
+     * centros</strong>.
+     * @throws SQLException
+     */
     public ResultSet listarCentrosColaDisponible() throws SQLException {
 
         String sSQL = "SELECT * FROM centros WHERE coladisponible > ?";
@@ -312,6 +325,12 @@ public class CentrosBBDD {
 
     }
 
+    /**
+     * Método que lista los centros de la tabla de <strong>centros</strong>.
+     *
+     * @return true o false dependiendo de si se pudo o no eliminar el centro.
+     * @throws SQLException
+     */
     public ArrayList<String> listarCentrosTrabajos() throws SQLException {
         ArrayList<String> lista = new ArrayList<>();
 
@@ -338,6 +357,14 @@ public class CentrosBBDD {
         return lista;
     }
 
+    /**
+     * Método que lista la cola de trabajos en los centros de la tabla de 
+     * <strong>centros</strong>.
+     *
+     * @param identCentro
+     * @return true o false dependiendo de si se pudo o no eliminar el centro.
+     * @throws SQLException
+     */
     public ResultSet colaTrabajosCentro(String identCentro) {
 
         int iIdCentro = 0;
@@ -370,6 +397,14 @@ public class CentrosBBDD {
         return rsColaTrabajosCentro;
     }
 
+    /**
+     * Método que lista los trabajos en proceso en los centros de la tabla de 
+     * <strong>centros</strong>.
+     *
+     * @param identCentro
+     * @return true o false dependiendo de si se pudo o no eliminar el centro.
+     * @throws SQLException
+     */
     public ResultSet trabajosEnProcesoCentro(String identCentro) {
 
         int iIdCentro = 0;

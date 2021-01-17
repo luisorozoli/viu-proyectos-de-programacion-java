@@ -102,6 +102,10 @@ public class VistaInformacion extends JFrame {
         this.getContentPane().add(cboCentros, new AbsoluteConstraints(50, 50, 100, 20));
     }
 
+    /**
+     * Clase que implementa el <strong>ActionListener</strong> del botón
+     * <strong>BotonSimularListener</strong> de la ventana <strong>Información</strong>.<br>
+     */
     class BotonSimularListener implements ActionListener {
 
         @Override
@@ -111,6 +115,10 @@ public class VistaInformacion extends JFrame {
         }
     }
 
+    /**
+     * Clase que implementa el <strong>ActionListener</strong> del botón
+     * <strong>BotonTrabajosSinAsignar</strong> de la ventana <strong>Información</strong>.<br>
+     */
     class BotonTrabajosSinAsignar implements ActionListener {
 
         @Override
@@ -120,6 +128,10 @@ public class VistaInformacion extends JFrame {
         }
     }
 
+    /**
+     * Clase que implementa el <strong>ActionListener</strong> del botón
+     * <strong>BotonColaTrabajosCentro</strong> de la ventana <strong>Información</strong>.<br>
+     */
     class BotonColaTrabajosCentro implements ActionListener {
 
         @Override
@@ -129,6 +141,10 @@ public class VistaInformacion extends JFrame {
         }
     }
 
+    /**
+     * Clase que implementa el <strong>ActionListener</strong> del botón
+     * <strong>BotonTrabajosEnProceso</strong> de la ventana <strong>Información</strong>.<br>
+     */
     class BotonTrabajosEnProceso implements ActionListener {
 
         @Override
@@ -138,6 +154,10 @@ public class VistaInformacion extends JFrame {
         }
     }
 
+    /**
+     * Clase que implementa el <strong>ActionListener</strong> del botón
+     * <strong>BotonHistoricoTrabajos</strong> de la ventana <strong>Información</strong>.<br>
+     */
     class BotonHistoricoTrabajos implements ActionListener {
 
         @Override
@@ -147,6 +167,11 @@ public class VistaInformacion extends JFrame {
         }
     }
 
+    /**
+     * Método que muestra los trabajos sin asignar
+     * @return true o false dependiendo de si se pudo o no eliminar el usuario.
+     * @throws SQLException 
+     */
     public void MostrarTrabajosSinAsignar() {
         while (this.model.getRowCount() > 0) {
             this.model.removeRow(0);
@@ -182,7 +207,12 @@ public class VistaInformacion extends JFrame {
         }
 
     }
-
+    
+    /**
+     * Método que muestra el cola de los trabajos
+     * @return true o false dependiendo de si se pudo o no eliminar el usuario.
+     * @throws SQLException 
+     */
     public void MostrarColaTrabajosCentro(String identCentro) {
         while (this.model.getRowCount() > 0) {
             this.model.removeRow(0);
@@ -219,6 +249,11 @@ public class VistaInformacion extends JFrame {
         }
     }
 
+    /**
+     * Método que muestra el historico de los trabajos en proceso
+     * @return true o false dependiendo de si se pudo o no eliminar el usuario.
+     * @throws SQLException 
+     */
     public void MostrarTrabajosEnProcesoCentro(String identCentro) {
         while (this.model.getRowCount() > 0) {
             this.model.removeRow(0);
@@ -257,6 +292,11 @@ public class VistaInformacion extends JFrame {
         }
     }
 
+    /**
+     * Método que muestra el historico de los trabajos procesados
+     * @return true o false dependiendo de si se pudo o no eliminar el usuario.
+     * @throws SQLException 
+     */
     public void MostrarHistoricoTrabajosProcesados() {
         while (this.model.getRowCount() > 0) {
             this.model.removeRow(0);

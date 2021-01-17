@@ -21,7 +21,7 @@ import javax.swing.JSpinner;
 
 
 /**
- *
+ * Clase utilizada para la simulación de operaciones.
  * @author Sebastian Plaza, Gonzalo Diaz, Luis Orozco.
  */
 public class VistaSimulacion extends JFrame {
@@ -86,7 +86,14 @@ public class VistaSimulacion extends JFrame {
             frame.dispose();
         }
     }
-
+    
+    /**
+     * Clase que simula el <strong>ActionListener</strong> del botón
+     * <strong>Simular</strong> de la ventana de
+     * <strong>Simulación</strong>.<br>
+     * Al hacer clic en el botón <strong>Simular</strong> se simularán
+     * las operaciones.
+     */
     class SimularBotonListener implements ActionListener {
 
         @Override

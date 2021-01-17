@@ -56,6 +56,15 @@ public class TrabajosBBDD {
         return rs;
     }
 
+    /**
+     * Método que realiza una consulta de todos los registros de la tabla de
+     * <strong>
+     * trabajos</strong> sin asignar.
+     *
+     * @return rs ResultSet con todos los registros de la tabla
+     * <strong>trabajos</strong>.
+     * @throws SQLException
+     */
     public ResultSet listarTrabajosSinAsignar() throws SQLException {
 
         String sSQL = "SELECT * FROM trabajos where centrotrabajo = \"\" order by idtrabajos";
@@ -148,6 +157,15 @@ public class TrabajosBBDD {
         }
     }
 
+    /**
+     * Método que realiza el <i>update</i> de un registro de la tabla
+     * <strong>trabajos</strong>
+     *
+     * @param identificadorCentro del trabajo que debe ser modificado.
+     * @return true o false dependiendo de si se p udo o no realizar el
+     * <i>update</i>.
+     * @throws SQLException
+     */
     public boolean modificarCentroTrabajo(int idT, String identificadorCentro) throws SQLException {
 
         try {
@@ -259,6 +277,13 @@ public class TrabajosBBDD {
 
     }
 
+    /**
+     * Método que muestra los trabajos de con un id dado.
+     *
+     * @param idTrabajo
+     * @return rs ResultSet con todos los trabajos con el id dado.
+     * @throws SQLException
+     */
     public int OperacionTrabajo(int idTrabajo) throws SQLException {
 
         String sSQL = "select * from trabajos where idtrabajos = ?";
