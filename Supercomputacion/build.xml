@@ -10,6 +10,13 @@
 <project name="Supercomputacion" default="default" basedir=".">
     <description>Builds, tests, and runs the project Supercomputacion.</description>
     <import file="nbproject/build-impl.xml"/>
+    
+    <target name="-post-jar">
+        <jar jarfile="${dist.jar}" update="true">
+            <zipfileset src="D:\dev\universidad\Proy_Programacion\viu-proyectos-de-programacion-java\Supercomputacion\libs\mariadb-java-client-2.6.2.jar" excludes="META-INF/*"/>
+            <zipfileset src="C:\Program Files\NetBeans-12.1\netbeans\java\modules\ext\AbsoluteLayout.jar" excludes="META-INF/*"/>
+        </jar>
+    </target>
     <!--
 
     There exist several targets which are by default empty and which can be 
