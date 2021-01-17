@@ -210,7 +210,7 @@ public class VistaInformacion extends JFrame {
     
     /**
      * Método que muestra el cola de los trabajos
-     * @return true o false dependiendo de si se pudo o no eliminar el usuario.
+     * @return true o false dependiendo de si se pudo mostrar.
      * @throws SQLException 
      */
     public void MostrarColaTrabajosCentro(String identCentro) {
@@ -251,7 +251,7 @@ public class VistaInformacion extends JFrame {
 
     /**
      * Método que muestra el historico de los trabajos en proceso
-     * @return true o false dependiendo de si se pudo o no eliminar el usuario.
+     * @return true o false dependiendo de si se pudo mostrar.
      * @throws SQLException 
      */
     public void MostrarTrabajosEnProcesoCentro(String identCentro) {
@@ -294,7 +294,7 @@ public class VistaInformacion extends JFrame {
 
     /**
      * Método que muestra el historico de los trabajos procesados
-     * @return true o false dependiendo de si se pudo o no eliminar el usuario.
+     * @return true o false dependiendo de si se pudo mostrar.
      * @throws SQLException 
      */
     public void MostrarHistoricoTrabajosProcesados() {

@@ -202,7 +202,7 @@ public class UsuariosBBDD {
     /**
      * Método que lista a los usuarios diferentes a AdministradorCentro y Administrador
      * de la tabla <strong>usuarios</strong>.
-     * @return true o false dependiendo de si se pudo o no eliminar el usuario.
+     * @return true o false dependiendo de si se pudo listar.
      * @throws SQLException 
      */
     public ArrayList<String> listarPropietariosTrabajos(Usuarios u) throws SQLException {

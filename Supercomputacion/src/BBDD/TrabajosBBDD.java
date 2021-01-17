@@ -162,7 +162,7 @@ public class TrabajosBBDD {
      * <strong>trabajos</strong>
      *
      * @param identificadorCentro del trabajo que debe ser modificado.
-     * @return true o false dependiendo de si se p udo o no realizar el
+     * @return true o false dependiendo de si se pudo o no realizar el
      * <i>update</i>.
      * @throws SQLException
      */

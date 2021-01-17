@@ -91,7 +91,7 @@ public class ProcesamientosBBDD {
      * del procesamiento
      * @param sEstadoTrabajo  con el <strong>estadotrabajo</strong>
      * del procesamiento
-     * @return true o false dependiendo de si se pudo insertar el registro o no.
+     * @return true o false dependiendo de si se pudo actualizar el registro o no.
      * @throws SQLException
      */
     public boolean actualizarOperRestantes(int idProcesamiento, int iOperRestantes, String sEstadoTrabajo) throws SQLException {
@@ -121,7 +121,7 @@ public class ProcesamientosBBDD {
      * Método que lista el histirico de trabajos de la tabla
      * <strong>procesamiento</strong>
      *
-     * @return true o false dependiendo de si se pudo insertar el registro o no.
+     * @return true o false dependiendo de si se pudo listar el registro o no.
      * @throws SQLException
      */
     public ResultSet listaHistoricoTrabajos() {

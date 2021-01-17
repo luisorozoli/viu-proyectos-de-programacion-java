@@ -328,7 +328,7 @@ public class CentrosBBDD {
     /**
      * Método que lista los centros de la tabla de <strong>centros</strong>.
      *
-     * @return true o false dependiendo de si se pudo o no eliminar el centro.
+     * @return true o false dependiendo de si se pudo listar.
      * @throws SQLException
      */
     public ArrayList<String> listarCentrosTrabajos() throws SQLException {
@@ -362,7 +362,7 @@ public class CentrosBBDD {
      * <strong>centros</strong>.
      *
      * @param identCentro
-     * @return true o false dependiendo de si se pudo o no eliminar el centro.
+     * @return true o false dependiendo de si se pudo listar.
      * @throws SQLException
      */
     public ResultSet colaTrabajosCentro(String identCentro) {
@@ -402,7 +402,7 @@ public class CentrosBBDD {
      * <strong>centros</strong>.
      *
      * @param identCentro
-     * @return true o false dependiendo de si se pudo o no eliminar el centro.
+     * @return true o false dependiendo de si se pudo listar.
      * @throws SQLException
      */
     public ResultSet trabajosEnProcesoCentro(String identCentro) {
